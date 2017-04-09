@@ -1,8 +1,7 @@
 import platform, subprocess
 
 def _linux():
-    scan_command = "iwlist wlan0 scan | grep ESSID | sort -u | awk '{print $2}'"
-    p1 = subprocess.Popen(["iwlist", "wlan", "scan"], stdout=subprocess.PIPE)
+    p1 = subprocess.Popen(["iwlist", "wlan0", "scan"], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(["grep", "ESSID"], stdin=p1.stdout, stdout=subprocess.PIPE)
     p3 = subprocess.Popen(["sort", "-u"], stdin=p2.stdout, stdout=subprocess.PIPE)
     p4 = subprocess.Popen(["awk", "{print $2}"], stdin=p3.stdout, stdout=subprocess.PIPE)
