@@ -2,13 +2,26 @@
 #from OS import *
 
 import urllib, re, os, zipfile, urllib.request
+from os import listdir
+from os.path import isfile, join
 
 base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
 directory_name = "images/"
 
 def img_dir_exists():
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    if not os.path.exists(directory_name):
+        os.makedirs(directory_name)
+
+img_dir_exists()
+
+def directory_list():
+    ls_in_directory = os.listdir(directory_name)
+    ls_of_imgs = []
+    for x in ls_in_directory:
+        if x[-4:] == ".img":
+            ls_of_imgs = ls_of_imgs + [x]
+    ls_of_imgs = ["None"] + ls_of_imgs
+    return ls_of_imgs;
 
 def image_list():
     base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
@@ -18,9 +31,9 @@ def image_list():
     url = url_stream.read().decode('utf-8')
     result_list1 = re.findall('20[0-9][0-9]-[0-9][0-9]-[0-9][0-9][a-z\-]+\/',url)
     result_list2 = re.findall('raspbian-20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]\/',url)
-    result_list = result_list1 + result_list2
+    result_list = result_list1[1::2] + result_list2[1::2]
 
-    return result_list;
+    return result_list[::-1];
 
 # result is a member of result_list from image_list().
 def download_iso(result):

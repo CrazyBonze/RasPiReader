@@ -12,6 +12,7 @@ class PersistentData(Singleton):
     ISODownloadImg = ""
     SSID = ""
     Settings = {}
+    DiskSD = ""
 
     def setISOFile(self, f):
         PersistentData.ISOFile = f
@@ -36,3 +37,8 @@ class PersistentData(Singleton):
 
     def getSettings(self):
         return PersistentData.Settings
+    def setDiskSD(self, disk):
+        PersistentData.DiskSD = disk
+
+    def getDiskSD(self):
+        return PersistentData.DiskSD
