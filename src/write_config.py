@@ -2,7 +2,7 @@ import os
 
 # Takes a dictionary of settings and their values 
 # and writes them to sdcard/boot/config.txt
-def write(sdcard, options):
+def write_config(sdcard, options):
     config_path = os.path.join(sdcard, "boot/config.txt")
     config_file = open(config_path, 'w')
     settings = [
