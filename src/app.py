@@ -61,31 +61,54 @@ class App(tk.Tk):
 
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
-        data = PersistentData()
+        self.data = PersistentData()
+        self.controller = controller
         tk.Frame.__init__(self, parent)
 
+        self.canvas = tk.Canvas(self)
         navbar_frame = tk.Frame(self)
-        content_frame = tk.Frame(self)
+        self.content_frame = tk.Frame(self.canvas)
+
+        self.scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand = self.scrollbar.set)
+        navbar_frame.pack()
+        self.scrollbar.pack(side=tk.RIGHT, fill= tk.Y)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.canvas.create_window((4,4), window=self.content_frame, anchor="nw")
+        self.content_frame.bind("<Configure>", self.onFrameConfigure)
 
         navbar(navbar_frame, controller, "Start Page")
 
-        iso_var = tk.StringVar(content_frame)
-        ISO_Menu = make_menu(content_frame, iso_var, directory_list())
-        ISO_Menu.grid(row=0, column=0)
-        data.setISOFile(iso_var.get())
+        self.populate()
 
-        img_var = tk.StringVar(content_frame)
-        DL_Img_Menu = make_menu(content_frame, img_var, image_list())
-        DL_Img_Menu.grid(row=1, column=0)
-        data.setISODownloadImg(img_var.get())
+    def onFrameConfigure(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
-        dsk_var = tk.StringVar(content_frame)
-        Disks_Menu = make_menu(content_frame, dsk_var, list_disks())
-        Disks_Menu.grid(row=2, column=0)
-        data.setDiskSD(dsk_var.get())
+    def populate(self):
+        iso_label = tk.Label(self.content_frame, text="local img")
+        iso_label.grid(row=0, sticky=tk.W)
+        iso_var = tk.StringVar(self.content_frame)
+        ISO_Menu = make_menu(self.content_frame, iso_var, directory_list())
+        ISO_Menu.grid(row=0, column=1, columnspan=2, sticky=tk.W)
+        self.data.setISOFile(iso_var.get())
 
-        navbar_frame.grid(row=0)
-        content_frame.grid(row=1)
+        img_label = tk.Label(self.content_frame, text="get img")
+        img_label.grid(row=1, sticky=tk.W)
+        img_var = tk.StringVar(self.content_frame)
+        DL_Img_Menu = make_menu(self.content_frame, img_var, image_list())
+        DL_Img_Menu.grid(row=1, column=1, columnspan=2, sticky=tk.W)
+        self.data.setISODownloadImg(img_var.get())
+
+        dsk_label = tk.Label(self.content_frame, text="SD card")
+        dsk_label.grid(row=2, sticky=tk.W)
+        dsk_var = tk.StringVar(self.content_frame)
+        Disks_Menu = make_menu(self.content_frame, dsk_var, list_disks())
+        Disks_Menu.grid(row=2, column=1, columnspan=2, sticky=tk.W)
+        self.data.setDiskSD(dsk_var.get())
+
+        next_button = tk.Button(self.content_frame, text="Next",
+            command=lambda: self.controller.show_frame(OptionsPage))
+        next_button.grid(row=12, column=12)
 
 class OptionsPage(tk.Frame):
     def __init__(self, parent, controller):
