@@ -69,14 +69,20 @@ class StartPage(tk.Frame):
 
         navbar(navbar_frame, controller, "Start Page")
 
-        ISO_Menu = make_menu(content_frame, directory_list())
-        #data.setISOFile(ISO_Entry.get())
+        iso_var = tk.StringVar(content_frame)
+        ISO_Menu = make_menu(content_frame, iso_var, directory_list())
         ISO_Menu.grid(row=0, column=0)
-        menu = make_menu(content_frame, image_list())
-        menu.grid(row=1, column=0)
+        data.setISOFile(iso_var.get())
 
-        disks = make_menu(content_frame, list_disks())
-        disks.grid(row=2, column=0)
+        img_var = tk.StringVar(content_frame)
+        DL_Img_Menu = make_menu(content_frame, img_var, image_list())
+        DL_Img_Menu.grid(row=1, column=0)
+        data.setISODownloadImg(img_var.get())
+
+        dsk_var = tk.StringVar(content_frame)
+        Disks_Menu = make_menu(content_frame, dsk_var, list_disks())
+        Disks_Menu.grid(row=2, column=0)
+        data.setDiskSD(dsk_var.get())
 
         navbar_frame.grid(row=0)
         content_frame.grid(row=1)
@@ -175,13 +181,13 @@ def make_entry(parent, caption, width=None, **options):
         entry.config(width=sidth)
     return entry
 
-def make_menu(parent, options):
-    var = tk.StringVar(parent)
+def make_menu(parent, var, options):
+    #var = tk.StringVar(parent)
     var.set(options[0])
     return tk.OptionMenu(parent, var, *options)
 
-def make_checkbutton(parent, caption, onval=1, offval=0):
-    var = tk.StringVar()
+def make_checkbutton(parent, var, caption, onval=1, offval=0):
+    #var = tk.StringVar()
     return tk.Checkbutton(parent,
             text=caption,
             variable=var,
