@@ -208,7 +208,7 @@ class OptionsPage(tk.Frame):
         current_settings = self.data.getSettings()
         self.entries = {}
         for setting in settings:
-            tk.Label(self.content_frame, text=setting["name"]).grid(row=current_row, column=0)
+            tk.Label(self.content_frame, text=setting["name"]).grid(row=current_row, column=0, sticky=tk.W)
             value = tk.StringVar()
             # Get setting's value from data or default to ""
             value.set(current_settings.get(setting["name"], ""))
