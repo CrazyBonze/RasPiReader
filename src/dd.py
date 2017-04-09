@@ -8,12 +8,6 @@ def _validate_device(sdcard):
         return True
     return False
 
-# Check that the file is an iso file.
-def _validate_file(file):
-    output = subprocess.check_output(["file", file])
-    # Check that file returned ISO keyword
-    return output.split(' ')[1] == "ISO"
-
 def _unmount(sdcard):
     system_name = platform.platform()
     if system_name.startswith("Darwin"):
@@ -28,9 +22,6 @@ def _unmount(sdcard):
 # Once dd is finished sync command is ran
 def dd(file, sdcard):
     if not _validate_device(sdcard):
-        return False
-
-    if not _validate_file(file):
         return False
 
     if not _unmount(sdcard):
@@ -52,5 +43,5 @@ def dd(file, sdcard):
     return True
 
 if __name__ == '__main__':
-    result = dd("/Users/chase/Downloads/xubuntu-16.04-desktop-amd64.iso", "/dev/disk2")
+    result = dd("/Users/chase/Downloads/2017-03-02-raspbian-jessie-lite.img", "/dev/disk2")
     print(result)
