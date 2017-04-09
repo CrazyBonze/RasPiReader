@@ -22,7 +22,7 @@ def _darwin():
     output, err = p4.communicate()
     return output.decode('utf-8').split()
 
-def scan():
+def ssid_scan():
     system = platform.system()
     ssids = []
     if system == 'Darwin':
@@ -32,5 +32,5 @@ def scan():
     return ssids
 
 if __name__ == '__main__':
-    ssids = scan()
+    ssids = ssid_scan()
     print(ssids)

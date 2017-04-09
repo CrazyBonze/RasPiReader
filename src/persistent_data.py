@@ -9,9 +9,16 @@ class PersistentData(Singleton):
     pass
 
     ISOFile = ""
+    SSID = ""
 
     def setISOFile(self, f):
         PersistentData.ISOFile = f
 
     def getISOFile(self):
         return PersistentData.ISOFile
+
+    def setSSID(self, ssid):
+        PersistentData.SSID = ssid
+
+    def getSSID(self):
+        return PersistentData.SSID
