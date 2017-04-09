@@ -45,6 +45,3 @@ def download_iso(result):
     zip_ref.close()
 
     return;
-
-list_of_things = image_list()
-download_iso(list_of_things[0])
