@@ -5,6 +5,8 @@ from persistent_data import PersistentData
 from wifi import *
 from download_img import *
 from list_disk import *
+from write_config import *
+from dd import *
 
 LARGE_FONT= ("Verdana", 12)
 
@@ -185,21 +187,23 @@ class OptionsPage(tk.Frame):
 
 class CommitPage(tk.Frame):
     def __init__(self, parent, controller):
-        data = PersistentData()
+        self.data = PersistentData()
         tk.Frame.__init__(self, parent)
 
         navbar_frame = tk.Frame(self)
         content_frame = tk.Frame(self)
 
-        settings = data.getSettings()
-        print(settings)
-        #label = tk.Label(content_frame, test=settings['hdmi_safe'])
-        #label.grid(row=1)
-
         navbar(navbar_frame, controller, "Commit Page")
+        commit_button = tk.Button(content_frame, text="Commit", command=self.commit_button_callback)
+        commit_button.grid(row=7, column=4)
 
         navbar_frame.grid(row=0)
         content_frame.grid(row=1)
+
+    def commit_button_callback(self):
+        sdcard = self.data.getDiskSD()
+        write_config(sdcard, self.data.getSettings())
+        dd(self.data.getISOFile, sdcard)
 
 class BackupPage(tk.Frame):
     def __init__(self, parent, controller):

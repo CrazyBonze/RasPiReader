@@ -40,6 +40,7 @@ class PersistentData(Singleton):
 
     def getSettings(self):
         return PersistentData.Settings
+
     def setDiskSD(self, disk):
         print(disk)
         PersistentData.DiskSD = disk
