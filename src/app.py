@@ -60,41 +60,78 @@ class StartPage(tk.Frame):
         menu = make_menu(f, image_list())
         f.pack(fill=tk.BOTH, expand=1)
 
-
-
-
 class OptionsPage(tk.Frame):
     def __init__(self, parent, controller):
-        data = PersistentData()
-        #print(data.getISOFile())
+        self.data = PersistentData()
+        self.controller = controller
         tk.Frame.__init__(self, parent)
-        #start button
-        f = tk.Frame(self)
-        button1 = tk.Button(f, text="Start",
-                command=lambda: controller.show_frame(StartPage))
-        button1.grid(row=0, column=0)
-        #options button
-        button2 = tk.Button(f, text="Options",
-                command=lambda: controller.show_frame(OptionsPage))
-        button2.grid(row=0, column=1)
-        #commit button
-        button3 = tk.Button(f, text="Commit",
-                command=lambda: controller.show_frame(CommitPage))
-        button3.grid(row=0, column=2)
-        #backup button
-        button4 = tk.Button(f, text="Backup",
-                command=lambda: controller.show_frame(BackupPage))
-        button4.grid(row=0, column=3)
-        label = tk.Label(f, text="Options Page", font=LARGE_FONT)
-        label.grid(row=0, column=4)
+        self.canvas = tk.Canvas(self)
+        self.frame = tk.Frame(self.canvas)
+        self.scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand = self.scrollbar.set)
+        self.scrollbar.pack(side=tk.RIGHT, fill= tk.Y)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.canvas.create_window((4,4), window=self.frame, anchor="nw")
+        self.frame.bind("<Configure>", self.onFrameConfigure)
 
-        #ISO_Menue = make_menu(self, ssid_scan())
-        #ISO_Menue.pack()
+        self.navbar()
+        self.populate()
 
-        #ISO_Entry = make_entry(self, data.getISOFile())
-        #ISO_Entry.pack(anchor=tk.W)
-        #data.setISOFile(ISO_Entry.get())
-        f.pack(fill=tk.BOTH, expand=1)
+    def onFrameConfigure(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    def navbar(self):
+       #start button
+       button1 = tk.Button(self.frame, text="Start",
+               command=lambda: self.controller.show_frame(StartPage))
+       button1.grid(row=0, column=0)
+       #options button
+       button2 = tk.Button(self.frame, text="Options",
+               command=lambda: self.controller.show_frame(OptionsPage))
+       button2.grid(row=0, column=1)
+       #commit button
+       button3 = tk.Button(self.frame, text="Commit",
+               command=lambda: self.controller.show_frame(CommitPage))
+       button3.grid(row=0, column=2)
+       #backup button
+       button4 = tk.Button(self.frame, text="Backup",
+               command=lambda: self.controller.show_frame(BackupPage))
+       button4.grid(row=0, column=3)
+       label = tk.Label(self.frame, text="Options Page", font=LARGE_FONT)
+       label.grid(row=0, column=4)
+
+    # Add all settings to grid
+    def populate(self):
+       settings = [
+           {"name": "hdmi_safe"},
+           {"name": "disable_overscan"},
+           {"name": "overscan_left"},
+           {"name": "overscan_right"},
+           {"name": "overscan_top"},
+           {"name": "overscan_bottom"},
+           {"name": "framebuffer_width"},
+           {"name": "framebuffer_height"},
+           {"name": "hdmi_force_hotplug"},
+           {"name": "hdmi_group"},
+           {"name": "hdmi_mode"},
+           {"name": "hdmi_drive"},
+           {"name": "config_hdmi_boost"},
+           {"name": "sdtv_mode"},
+           {"name": "arm_freq"},
+           {"name": "i2c"},
+           {"name": "i2s"},
+           {"name": "spi"},
+           {"name": "lirc-rpi"},
+           {"name": "audio"}
+       ]
+
+       current_row = 1
+       for setting in settings:
+           tk.Label(self.frame, text=setting["name"]).grid(row=current_row, column=0)
+           make_entry(self.frame, "").grid(row=current_row, column=1)
+           current_row = current_row + 1
+
+       # f.pack(fill=tk.BOTH, expand=1)
 
 class CommitPage(tk.Frame):
     def __init__(self, parent, controller):
