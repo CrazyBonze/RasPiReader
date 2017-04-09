@@ -1,6 +1,14 @@
 import platform, subprocess
 
 def _linux():
+    p001 = subprocess.Popen(["ifconfig"], stdout=subprocess.PIPE)
+    p002 = subprocess.Popen(["grep", "wlan0"], stdin=p001.stdout,stdout=subprocess.PIPE)
+    output001, err001 = p002.communicate()
+    p001.stdout.close()
+    if output001.decode('utf-8') == "":
+        not_found = ["Wifi Not Found"]
+        return not_found;
+
     p1 = subprocess.Popen(["iwlist", "wlan0", "scan"], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(["grep", "ESSID"], stdin=p1.stdout, stdout=subprocess.PIPE)
     p3 = subprocess.Popen(["sort", "-u"], stdin=p2.stdout, stdout=subprocess.PIPE)
