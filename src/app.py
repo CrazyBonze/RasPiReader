@@ -53,16 +53,19 @@ class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         data = PersistentData()
         tk.Frame.__init__(self, parent)
-        f = tk.Frame(self)
 
-        navbar(f, controller, "Start Page")
+        navbar_frame = tk.Frame(self)
+        content_frame = tk.Frame(self)
 
-        ISO_Entry = make_entry(f, "select iso")
+        navbar(navbar_frame, controller, "Start Page")
+
+        ISO_Entry = make_entry(content_frame, "select iso")
         data.setISOFile(ISO_Entry.get())
         ISO_Entry.grid(row=2, column=0)
+        menu = make_menu(content_frame, image_list())
 
-        menu = make_menu(f, image_list())
-        f.pack(fill=tk.BOTH, expand=1)
+        navbar_frame.grid(row=0)
+        content_frame.grid(row=1)
 
 class OptionsPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -71,15 +74,18 @@ class OptionsPage(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self.canvas = tk.Canvas(self)
-        self.frame = tk.Frame(self.canvas)
+        navbar_frame = tk.Frame(self)
+        self.content_frame = tk.Frame(self.canvas)
+
         self.scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand = self.scrollbar.set)
+        navbar_frame.grid(row=0)
         self.scrollbar.pack(side=tk.RIGHT, fill= tk.Y)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        self.canvas.create_window((4,4), window=self.frame, anchor="nw")
-        self.frame.bind("<Configure>", self.onFrameConfigure)
+        self.canvas.create_window((4,4), window=self.content_frame, anchor="nw")
+        self.content_frame.bind("<Configure>", self.onFrameConfigure)
 
-        navbar(self.frame, self.controller, "Options Page")
+        navbar(navbar_frame, self.controller, "Options Page")
         self.populate()
 
     def onFrameConfigure(self, event):
@@ -112,10 +118,11 @@ class OptionsPage(tk.Frame):
         ]
         current_row = 1
         for setting in settings:
-           tk.Label(self.frame, text=setting["name"]).grid(row=current_row, column=0)
-           make_entry(self.frame, "").grid(row=current_row, column=1)
+           tk.Label(self.content_frame, text=setting["name"]).grid(row=current_row, column=0)
+           make_entry(self.content_frame, "").grid(row=current_row, column=1)
            current_row = current_row + 1
-        button1 = tk.Button(self.frame, text="Next",
+
+        button1 = tk.Button(self.content_frame, text="Next",
             command=lambda: self.controller.show_frame(CommitPage))
         button1.grid(row=current_row, column=4)
 
@@ -123,17 +130,27 @@ class CommitPage(tk.Frame):
     def __init__(self, parent, controller):
         data = PersistentData()
         tk.Frame.__init__(self, parent)
-        f = tk.Frame(self)
-        navbar(f, controller, "Commit Page")
-        f.pack(fill=tk.BOTH, expand=1)
+
+        navbar_frame = tk.Frame(self)
+        content_frame = tk.Frame(self)
+
+        navbar(navbar_frame, controller, "Commit Page")
+
+        navbar_frame.grid(row=0)
+        content_frame.grid(row=1)
 
 class BackupPage(tk.Frame):
     def __init__(self, parent, controller):
         data = PersistentData()
         tk.Frame.__init__(self, parent)
-        f = tk.Frame(self)
-        navbar(f, controller, "Backup Page")
-        f.pack(fill=tk.BOTH, expand=1)
+
+        navbar_frame = tk.Frame(self)
+        content_frame = tk.Frame(self)
+
+        navbar(navbar_frame, controller, "Backup Page")
+
+        navbar_frame.grid(row=0)
+        content_frame.grid(row=1)
 
 
 def make_entry(parent, caption, width=None, **options):
