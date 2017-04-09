@@ -1,17 +1,13 @@
-#!/usr/bin/python3.5
-#import tkinter as tk   # python3
-#import Tkinter as tk   # python
 # The code for changing pages was derived from: http://stackoverflow.com/questions/7546050/switch-between-two-frames-in-tkinter
-# License: http://creativecommons.org/licenses/by-sa/3.0/
 
 import tkinter as tk
-
+from persistent_data import PersistentData
 
 LARGE_FONT= ("Verdana", 12)
 
-
 class App(tk.Tk):
     def __init__(self, *args, **kwargs):
+        data = PersistentData()
         tk.Tk.__init__(self, *args, **kwargs)
         self.geometry("460x460+300+300")
         self.title("RasPiReader")
@@ -33,6 +29,7 @@ class App(tk.Tk):
 
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
+        data = PersistentData()
         tk.Frame.__init__(self, parent)
         #start button
         button1 = tk.Button(self, text="Start",
@@ -53,9 +50,20 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Start Page", font=LARGE_FONT)
         label.pack(anchor=tk.N)
 
+        ISO_Entry = makeentry(self, "select iso")
+        ISO_Entry.pack(anchor=tk.W)
+        data.setISOFile(ISO_Entry.get())
+
+        var = tk.StringVar(self)
+        option = tk.OptionMenu(self, var, "one", "two", "three")
+        option.pack()
+
+
 
 class OptionsPage(tk.Frame):
     def __init__(self, parent, controller):
+        data = PersistentData()
+        #print(data.getISOFile())
         tk.Frame.__init__(self, parent)
         #start button
         button1 = tk.Button(self, text="Start",
@@ -76,8 +84,13 @@ class OptionsPage(tk.Frame):
         label = tk.Label(self, text="Options Page", font=LARGE_FONT)
         label.pack(anchor=tk.N)
 
+        ISO_Entry = makeentry(self, data.getISOFile())
+        ISO_Entry.pack(anchor=tk.W)
+        data.setISOFile(ISO_Entry.get())
+
 class CommitPage(tk.Frame):
     def __init__(self, parent, controller):
+        data = PersistentData()
         tk.Frame.__init__(self, parent)
         #start button
         button1 = tk.Button(self, text="Start",
@@ -100,6 +113,7 @@ class CommitPage(tk.Frame):
 
 class BackupPage(tk.Frame):
     def __init__(self, parent, controller):
+        data = PersistentData()
         tk.Frame.__init__(self, parent)
         #start button
         button1 = tk.Button(self, text="Start",
@@ -119,3 +133,12 @@ class BackupPage(tk.Frame):
         button4.pack(side=tk.LEFT, anchor=tk.N)
         label = tk.Label(self, text="Backup Page", font=LARGE_FONT)
         label.pack(anchor=tk.N)
+
+
+def makeentry(parent, caption, width=None, **options):
+    tk.Label(parent, text=caption)
+    entry = tk.Entry(parent, **options)
+    entry.insert(0, caption)
+    if width:
+        entry.config(width=sidth)
+    return entry
