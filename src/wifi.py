@@ -17,7 +17,11 @@ def _linux():
     p2.stdout.close()
     p3.stdout.close()
     output, err = p4.communicate()
-    return output.decode('utf-8').split()
+    lst = output.decode('utf-8').split()
+    for idx,ssid in enumerate(lst):
+        if ssid.startswith('"') and ssid.endswith('"'):
+            lst[idx] = ssid[1:-1]
+    return lst
 
 def _darwin():
     p1 = subprocess.Popen(["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "-s"], stdout=subprocess.PIPE)

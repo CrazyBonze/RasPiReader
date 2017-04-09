@@ -111,8 +111,20 @@ class StartPage(tk.Frame):
         dsk_label.grid(row=2, sticky=tk.W)
         self.dsk_var = tk.StringVar(self.content_frame)
         Disks_Menu = make_menu(self.content_frame, self.dsk_var, list_disks())
-        Disks_Menu.grid(row=2, column=1, columnspan=2, sticky=tk.W)
+        Disks_Menu.grid(row=2, column=1)
         self.data.setDiskSD(self.dsk_var.get())
+
+        wifi_label = tk.Label(self.content_frame, text="wifi ssid")
+        wifi_label.grid(row=3, sticky=tk.W)
+        self.wifi_var = tk.StringVar(self.content_frame)
+        Wifi_Menu = make_menu(self.content_frame, self.wifi_var, ssid_scan())
+        Wifi_Menu.grid(row=3, column=1)
+
+        pswd_label = tk.Label(self.content_frame, text="wifi pass")
+        pswd_label.grid(row=4, sticky=tk.W)
+        self.pswd_var = tk.StringVar(self.content_frame)
+        Pswd_Entry = make_entry(self.content_frame, "hello")
+        Pswd_Entry.grid(row=4, column=1)
 
         next_button = tk.Button(self.content_frame, text="Next",
                 command=lambda:self.cmd())
@@ -122,6 +134,9 @@ class StartPage(tk.Frame):
         self.data.setISOFile(self.iso_var.get())
         self.data.setISODownloadImg(self.img_var.get())
         self.data.setDiskSD(self.dsk_var.get())
+        wifi = {"ssid":self.wifi_var.get(),
+                "pass":self.pswd_var.get() }
+        self.data.setWIFI(wifi)
         self.controller.show_frame(OptionsPage)
 
 class OptionsPage(tk.Frame):
