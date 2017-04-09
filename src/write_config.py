@@ -1,8 +1,22 @@
-import os
+import os, platform, subprocess
+
+def _mount(sdcard):
+    system_name = platform.platform()
+    if system_name.startswith("Darwin"):
+        subprocess.check_output(["diskutil", "mountDisk", sdcard])
+    elif system_name.startswith("Linux"):
+        subprocess.check_output(["mount", sdcard])
+    else:
+        return False
+    return True
 
 # Takes a dictionary of settings and their values 
 # and writes them to sdcard/boot/config.txt
 def write_config(sdcard, options):
+
+    if not os.path.ismount(sdcard):
+        _mount(sdcard)
+
     config_path = os.path.join(sdcard, "boot/config.txt")
     config_file = open(config_path, 'w')
     settings = [
