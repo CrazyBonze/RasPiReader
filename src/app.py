@@ -65,6 +65,7 @@ class OptionsPage(tk.Frame):
         self.data = PersistentData()
         self.controller = controller
         tk.Frame.__init__(self, parent)
+
         self.canvas = tk.Canvas(self)
         self.frame = tk.Frame(self.canvas)
         self.scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
@@ -131,31 +132,29 @@ class OptionsPage(tk.Frame):
            make_entry(self.frame, "").grid(row=current_row, column=1)
            current_row = current_row + 1
 
-       # f.pack(fill=tk.BOTH, expand=1)
-
 class CommitPage(tk.Frame):
     def __init__(self, parent, controller):
         data = PersistentData()
         tk.Frame.__init__(self, parent)
         f = tk.Frame(self)
         #start button
-        button1 = tk.Button(self, text="Start",
+        button1 = tk.Button(f, text="Start",
                 command=lambda: controller.show_frame(StartPage))
-        button1.pack(side=tk.LEFT, anchor=tk.N)
+        button1.grid(row=0, column=0)
         #options button
-        button2 = tk.Button(self, text="Options",
+        button2 = tk.Button(f, text="Options",
                 command=lambda: controller.show_frame(OptionsPage))
-        button2.pack(side=tk.LEFT, anchor=tk.N)
+        button2.grid(row=0, column=1)
         #commit button
-        button3 = tk.Button(self, text="Commit",
+        button3 = tk.Button(f, text="Commit",
                 command=lambda: controller.show_frame(CommitPage))
-        button3.pack(side=tk.LEFT, anchor=tk.N)
+        button3.grid(row=0, column=2)
         #backup button
-        button4 = tk.Button(self, text="Backup",
+        button4 = tk.Button(f, text="Backup",
                 command=lambda: controller.show_frame(BackupPage))
-        button4.pack(side=tk.LEFT, anchor=tk.N)
-        label = tk.Label(self, text="Commit Page", font=LARGE_FONT)
-        label.pack(anchor=tk.N)
+        button4.grid(row=0, column=3)
+        label = tk.Label(f, text="Commit Page", font=LARGE_FONT)
+        label.grid(row=0, column=4)
         f.pack(fill=tk.BOTH, expand=1)
 
 class BackupPage(tk.Frame):
@@ -164,23 +163,23 @@ class BackupPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         f = tk.Frame(self)
         #start button
-        button1 = tk.Button(self, text="Start",
+        button1 = tk.Button(f, text="Start",
                 command=lambda: controller.show_frame(StartPage))
-        button1.pack(side=tk.LEFT, anchor=tk.N)
+        button1.grid(row=0, column=0)
         #options button
-        button2 = tk.Button(self, text="Options",
+        button2 = tk.Button(f, text="Options",
                 command=lambda: controller.show_frame(OptionsPage))
-        button2.pack(side=tk.LEFT, anchor=tk.N)
+        button2.grid(row=0, column=1)
         #commit button
-        button3 = tk.Button(self, text="Commit",
+        button3 = tk.Button(f, text="Commit",
                 command=lambda: controller.show_frame(CommitPage))
-        button3.pack(side=tk.LEFT, anchor=tk.N)
+        button3.grid(row=0, column=2)
         #backup button
-        button4 = tk.Button(self, text="Backup",
+        button4 = tk.Button(f, text="Backup",
                 command=lambda: controller.show_frame(BackupPage))
-        button4.pack(side=tk.LEFT, anchor=tk.N)
-        label = tk.Label(self, text="Backup Page", font=LARGE_FONT)
-        label.pack(anchor=tk.N)
+        button4.grid(row=0, column=3)
+        label = tk.Label(f, text="Backup Page", font=LARGE_FONT)
+        label.grid(row=0, column=4)
         f.pack(fill=tk.BOTH, expand=1)
 
 
