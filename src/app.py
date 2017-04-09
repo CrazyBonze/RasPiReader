@@ -88,6 +88,7 @@ class StartPage(tk.Frame):
     def iso_dropdown_callback(self):
         download_iso(self.img_var.get())
 
+
     def populate(self):
         iso_label = tk.Label(self.content_frame, text="local img")
         iso_label.grid(row=0, sticky=tk.W)
@@ -95,6 +96,10 @@ class StartPage(tk.Frame):
         ISO_Menu = make_menu(self.content_frame, self.iso_var, directory_list())
         ISO_Menu.grid(row=0, column=1, columnspan=2, sticky="ew")
         self.data.setISOFile(self.iso_var.get())
+        #TODO does not update
+        ISO_update = tk.Button(self.content_frame, text="Update",
+                command=lambda: ISO_Menu.entryconfig(1,"hello"))
+        ISO_update.grid(row=0, column=3, sticky="ew")
 
         img_label = tk.Label(self.content_frame, text="get img")
         img_label.grid(row=1, sticky=tk.W)
@@ -103,7 +108,7 @@ class StartPage(tk.Frame):
         self.DL_Img_Menu.grid(row=1, column=1, columnspan=2, sticky="ew")
         DL_img_button = tk.Button(self.content_frame, text="Download",
             command=self.iso_dropdown_callback)
-        DL_img_button.grid(row=1, column=3)
+        DL_img_button.grid(row=1, column=3, sticky="ew")
 
         #self.data.setISODownloadImg(self.img_var.get())
 
@@ -113,6 +118,10 @@ class StartPage(tk.Frame):
         Disks_Menu = make_menu(self.content_frame, self.dsk_var, list_disks())
         Disks_Menu.grid(row=2, column=1, columnspan=2, sticky="ew")
         self.data.setDiskSD(self.dsk_var.get())
+        #TODO does not update
+        Disk_update = tk.Button(self.content_frame, text="Update",
+                command=lambda: Disks_Menu.add(label="hello"))
+        Disk_update.grid(row=2, column=3, sticky="ew")
 
         wifi_label = tk.Label(self.content_frame, text="wifi ssid")
         wifi_label.grid(row=3, sticky=tk.W)
@@ -123,8 +132,8 @@ class StartPage(tk.Frame):
         pswd_label = tk.Label(self.content_frame, text="wifi pass")
         pswd_label.grid(row=4, sticky=tk.W)
         self.pswd_var = tk.StringVar(self.content_frame)
-        Pswd_Entry = make_entry(self.content_frame, "hello")
-        Pswd_Entry.grid(row=4, column=1, columnspan=2, sticky="ew")
+        self.Pswd_Entry = make_entry(self.content_frame, "hello")
+        self.Pswd_Entry.grid(row=4, column=1, columnspan=2, sticky="ew")
 
         next_button = tk.Button(self.content_frame, text="Next",
                 command=lambda:self.cmd())
@@ -135,7 +144,7 @@ class StartPage(tk.Frame):
         self.data.setISODownloadImg(self.img_var.get())
         self.data.setDiskSD(self.dsk_var.get())
         wifi = {"ssid":self.wifi_var.get(),
-                "pass":self.pswd_var.get() }
+                "pass":self.Pswd_Entry.get() }
         self.data.setWIFI(wifi)
         self.controller.show_frame(OptionsPage)
 
