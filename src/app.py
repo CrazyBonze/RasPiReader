@@ -33,7 +33,7 @@ def navbar(frame, controller, current_page):
         b = tk.Button(frame, text=button["name"], command=lambda button=button: controller.show_frame(button["page"]))
         b.grid(row=0, column=current_column)
         current_column = current_column + 1
-    
+
     label = tk.Label(frame, text=current_page, font=LARGE_FONT)
     label.grid(row=0, column=current_column)
 
@@ -69,9 +69,9 @@ class StartPage(tk.Frame):
 
         navbar(navbar_frame, controller, "Start Page")
 
-        ISO_Entry = make_entry(content_frame, "select iso")
-        data.setISOFile(ISO_Entry.get())
-        ISO_Entry.grid(row=0, column=0)
+        ISO_Menu = make_menu(content_frame, directory_list())
+        #data.setISOFile(ISO_Entry.get())
+        ISO_Menu.grid(row=0, column=0)
         menu = make_menu(content_frame, image_list())
         menu.grid(row=1, column=0)
 

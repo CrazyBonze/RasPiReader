@@ -2,6 +2,8 @@
 #from OS import *
 
 import urllib, re, os, zipfile, urllib.request
+from os import listdir
+from os.path import isfile, join
 
 base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
 directory_name = "images/"
@@ -11,6 +13,9 @@ def img_dir_exists():
         os.makedirs(directory_name)
 
 img_dir_exists()
+
+def directory_list():
+    return os.listdir(directory_name)
 
 def image_list():
     base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
