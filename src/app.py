@@ -135,7 +135,7 @@ class OptionsPage(tk.Frame):
     def onFrameConfigure(self, event):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
-    
+
     def next_button_callback(self):
         new_settings = {}
         for key, value in self.entries.items():
@@ -207,16 +207,43 @@ class CommitPage(tk.Frame):
 
 class BackupPage(tk.Frame):
     def __init__(self, parent, controller):
-        data = PersistentData()
+        self.data = PersistentData()
+        self.controller = controller
         tk.Frame.__init__(self, parent)
 
+        self.canvas = tk.Canvas(self)
         navbar_frame = tk.Frame(self)
-        content_frame = tk.Frame(self)
+        self.content_frame = tk.Frame(self.canvas)
+
+        self.scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        self.canvas.configure(yscrollcommand = self.scrollbar.set)
+        navbar_frame.pack()
+        self.scrollbar.pack(side=tk.RIGHT, fill= tk.Y)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.canvas.create_window((4,4), window=self.content_frame, anchor="nw")
+        self.content_frame.bind("<Configure>", self.onFrameConfigure)
 
         navbar(navbar_frame, controller, "Backup Page")
 
-        navbar_frame.grid(row=0)
-        content_frame.grid(row=1)
+        self.populate()
+
+    def onFrameConfigure(self, event):
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
+
+    def populate(self):
+        dsk_label = tk.Label(self.content_frame, text="SD card")
+        dsk_label.grid(row=2, sticky=tk.W)
+        dsk_var = tk.StringVar(self.content_frame)
+        Disks_Menu = make_menu(self.content_frame, dsk_var, list_disks())
+        Disks_Menu.grid(row=2, column=1, columnspan=2, sticky=tk.W)
+        self.data.setDiskSD(dsk_var.get())
+
+        next_button = tk.Button(self.content_frame, text="Backup",
+            command=lambda: self.Backup())
+        next_button.grid(row=12, column=12)
+
+    def Backup(self):
+        print("backup")
 
 def make_entry(parent, caption, width=None, **options):
     tk.Label(parent, text=caption)
