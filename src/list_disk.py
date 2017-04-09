@@ -3,8 +3,13 @@ import subprocess, os, platform, itertools
 def list_disks():
     system_name = platform.platform()
     if system_name.startswith("Darwin"):
-        #chase will have to do this
         return []
+        #chase will have to do this
+        #disk_command = ["diskutil", "info", "-all"]
+        #p = subprocess.Popen(disk_command, stdout=subprocess.PIPE)
+        #output, err = p.communicate()
+        #Do regex stuff
+        # ...
     elif system_name.startswith("Linux"):
         disk_command = ["lsblk", "-n", "-o", "KNAME,RM"]
         p = subprocess.Popen(disk_command, stdout=subprocess.PIPE)
