@@ -21,7 +21,7 @@ def _linux():
     for idx,ssid in enumerate(lst):
         if ssid.startswith('"') and ssid.endswith('"'):
             lst[idx] = ssid[1:-1]
-    return lst
+    return lst or ["None"]
 
 def _darwin():
     p1 = subprocess.Popen(["/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport", "-s"], stdout=subprocess.PIPE)
@@ -32,7 +32,7 @@ def _darwin():
     p2.stdout.close()
     p3.stdout.close()
     output, err = p4.communicate()
-    return output.decode('utf-8').split()
+    return output.decode('utf-8').split() or ["None"]
 
 def ssid_scan():
     system = platform.system()
