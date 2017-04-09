@@ -2,7 +2,7 @@
 
 import tkinter as tk
 from persistent_data import PersistentData
-#from download_img import *
+from wifi import *
 
 LARGE_FONT= ("Verdana", 12)
 
@@ -51,11 +51,11 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Start Page", font=LARGE_FONT)
         label.pack(anchor=tk.N)
 
-        ISO_Entry = makeentry(self, "select iso")
+        ISO_Entry = make_entry(self, "select iso")
         ISO_Entry.pack(anchor=tk.W)
         data.setISOFile(ISO_Entry.get())
 
-        ISO_Menue = makemenu(self, ["one","two"])
+        ISO_Menue = make_menu(self, ssid_scan())
         ISO_Menue.pack()
 
 
@@ -86,7 +86,7 @@ class OptionsPage(tk.Frame):
         label = tk.Label(self, text="Options Page", font=LARGE_FONT)
         label.pack(anchor=tk.N)
 
-        ISO_Entry = makeentry(self, data.getISOFile())
+        ISO_Entry = make_entry(self, data.getISOFile())
         ISO_Entry.pack(anchor=tk.W)
         data.setISOFile(ISO_Entry.get())
 
@@ -137,7 +137,7 @@ class BackupPage(tk.Frame):
         label.pack(anchor=tk.N)
 
 
-def makeentry(parent, caption, width=None, **options):
+def make_entry(parent, caption, width=None, **options):
     tk.Label(parent, text=caption)
     entry = tk.Entry(parent, **options)
     entry.insert(0, caption)
@@ -145,7 +145,7 @@ def makeentry(parent, caption, width=None, **options):
         entry.config(width=sidth)
     return entry
 
-def makemenu(parent, options):
+def make_menu(parent, options):
     var = tk.StringVar(parent)
     var.set(options[0])
     return tk.OptionMenu(parent, var, *options)
