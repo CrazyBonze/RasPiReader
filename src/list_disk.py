@@ -13,7 +13,7 @@ def list_disks():
         d = dict(itertools.zip_longest(*[iter(lst)] * 2, fillvalue=""))
         d = {k:v for k,v in d.items() if int(v[0]) }
         #TODO remove values with numbers
-        return list(d.keys())
+        return list(d.keys()) or ["None"]
     return ["None"]
 
 
