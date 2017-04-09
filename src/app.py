@@ -202,8 +202,8 @@ class CommitPage(tk.Frame):
 
     def commit_button_callback(self):
         sdcard = self.data.getDiskSD()
-        write_config(sdcard, self.data.getSettings())
         dd(self.data.getISOFile, sdcard)
+        write_config(sdcard, self.data.getSettings())
 
 class BackupPage(tk.Frame):
     def __init__(self, parent, controller):
