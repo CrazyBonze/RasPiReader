@@ -20,7 +20,7 @@ class App(tk.Tk):
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
         self.frames = {}
-        for F in (StartPage, OptionsPage, CommitPage):
+        for F in (StartPage, OptionsPage, CommitPage, BackupPage):
             frame = F(container, self)
             self.frames[F] = frame
             frame.grid(row=0, column=0, sticky="nsew")
@@ -31,95 +31,91 @@ class App(tk.Tk):
         frame.tkraise()
 
 
-class Screen(tk.Frame):
+class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        self.buttons = [
-                {   'name':'Start',
-                    'function':self.Start,
-                    'cont':StartPage },
-                {   'name':'Options',
-                    'function':self.Options,
-                    'cont':OptionsPage }
-                ]
-        self.BuildButtons(self.buttons, controller)
-
-    def BuildButtons(self, buttons, controller):
-        pos = 0
-        for b in self.buttons:
-            label = b['name']
-            y = tk.Button(self, text=b['name'],
-                    command=lambda: controller.show_frame(b['cont']))
-            y.pack()
-
-    def Start(self):
-        self.controller.show_rame(PageOne)
-        print("hello from start")
-
-    def Options(self):
-        print("hellow from options")
-
-
-class StartPage(Screen):
-    def __init__(self, parent, controller):
-        tk.Frame.__init__(self,parent)
-        self.buttons = [
-                {   'name':'Start',
-                    'function':self.Start,
-                    'cont':StartPage },
-                {   'name':'Options',
-                    'function':self.Options,
-                    'cont':OptionsPage }
-                ]
-        self.BuildButtons(self.buttons, controller)
-
-    def BuildButtons(self, buttons, controller):
-        pos = 0
-        for b in self.buttons:
-            label = b['name']
-            y = tk.Button(self, text=b['name'],
-                    command=lambda: controller.show_frame(b['cont']))
-            y.pack()
-
-    def Start(self):
-        self.controller.show_rame(PageOne)
-        print("hello from start")
-
-    def Options(self):
-        print("hellow from options")
-
-
+        #start button
+        button1 = tk.Button(self, text="Start",
+                command=lambda: controller.show_frame(StartPage))
+        button1.pack(side=tk.LEFT, anchor=tk.N)
+        #options button
+        button2 = tk.Button(self, text="Options",
+                command=lambda: controller.show_frame(OptionsPage))
+        button2.pack(side=tk.LEFT, anchor=tk.N)
+        #commit button
+        button3 = tk.Button(self, text="Commit",
+                command=lambda: controller.show_frame(CommitPage))
+        button3.pack(side=tk.LEFT, anchor=tk.N)
+        #backup button
+        button4 = tk.Button(self, text="Backup",
+                command=lambda: controller.show_frame(BackupPage))
+        button4.pack(side=tk.LEFT, anchor=tk.N)
+        label = tk.Label(self, text="Start Page", font=LARGE_FONT)
+        label.pack(anchor=tk.N)
 
 
 class OptionsPage(tk.Frame):
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page One!!!", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
-
-        button1 = tk.Button(self, text="Back to Home",
-                            command=lambda: controller.show_frame(StartPage))
-        button1.pack()
-
-        button2 = tk.Button(self, text="Page Two",
-                            command=lambda: controller.show_frame(PageTwo))
-        button2.pack()
-
+        #start button
+        button1 = tk.Button(self, text="Start",
+                command=lambda: controller.show_frame(StartPage))
+        button1.pack(side=tk.LEFT, anchor=tk.N)
+        #options button
+        button2 = tk.Button(self, text="Options",
+                command=lambda: controller.show_frame(OptionsPage))
+        button2.pack(side=tk.LEFT, anchor=tk.N)
+        #commit button
+        button3 = tk.Button(self, text="Commit",
+                command=lambda: controller.show_frame(CommitPage))
+        button3.pack(side=tk.LEFT, anchor=tk.N)
+        #backup button
+        button4 = tk.Button(self, text="Backup",
+                command=lambda: controller.show_frame(BackupPage))
+        button4.pack(side=tk.LEFT, anchor=tk.N)
+        label = tk.Label(self, text="Options Page", font=LARGE_FONT)
+        label.pack(anchor=tk.N)
 
 class CommitPage(tk.Frame):
-
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Page Two!!!", font=LARGE_FONT)
-        label.pack(pady=10,padx=10)
+        #start button
+        button1 = tk.Button(self, text="Start",
+                command=lambda: controller.show_frame(StartPage))
+        button1.pack(side=tk.LEFT, anchor=tk.N)
+        #options button
+        button2 = tk.Button(self, text="Options",
+                command=lambda: controller.show_frame(OptionsPage))
+        button2.pack(side=tk.LEFT, anchor=tk.N)
+        #commit button
+        button3 = tk.Button(self, text="Commit",
+                command=lambda: controller.show_frame(CommitPage))
+        button3.pack(side=tk.LEFT, anchor=tk.N)
+        #backup button
+        button4 = tk.Button(self, text="Backup",
+                command=lambda: controller.show_frame(BackupPage))
+        button4.pack(side=tk.LEFT, anchor=tk.N)
+        label = tk.Label(self, text="Commit Page", font=LARGE_FONT)
+        label.pack(anchor=tk.N)
 
-        button1 = tk.Button(self, text="Back to Home",
-                            command=lambda: controller.show_frame(StartPage))
-        button1.pack()
-
-        button2 = tk.Button(self, text="Page One",
-                            command=lambda: controller.show_frame(PageOne))
-        button2.pack()
-
-
+class BackupPage(tk.Frame):
+    def __init__(self, parent, controller):
+        tk.Frame.__init__(self, parent)
+        #start button
+        button1 = tk.Button(self, text="Start",
+                command=lambda: controller.show_frame(StartPage))
+        button1.pack(side=tk.LEFT, anchor=tk.N)
+        #options button
+        button2 = tk.Button(self, text="Options",
+                command=lambda: controller.show_frame(OptionsPage))
+        button2.pack(side=tk.LEFT, anchor=tk.N)
+        #commit button
+        button3 = tk.Button(self, text="Commit",
+                command=lambda: controller.show_frame(CommitPage))
+        button3.pack(side=tk.LEFT, anchor=tk.N)
+        #backup button
+        button4 = tk.Button(self, text="Backup",
+                command=lambda: controller.show_frame(BackupPage))
+        button4.pack(side=tk.LEFT, anchor=tk.N)
+        label = tk.Label(self, text="Backup Page", font=LARGE_FONT)
+        label.pack(anchor=tk.N)
