@@ -24,7 +24,7 @@ def dd(file, sdcard):
     if not _validate_device(sdcard):
         return False
 
-    if os.ismount(sdcard):
+    if os.path.ismount(sdcard):
         if not _unmount(sdcard):
             return False
 
