@@ -57,7 +57,6 @@ class App(tk.Tk):
         frame = self.frames[cont]
         frame.tkraise()
 
-
 class StartPage(tk.Frame):
     def __init__(self, parent, controller):
         data = PersistentData()
@@ -100,6 +99,13 @@ class OptionsPage(tk.Frame):
     def onFrameConfigure(self, event):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
+    
+    def next_button_callback(self):
+        new_settings = {}
+        for key, value in self.entries.items():
+            new_settings[key] = value.get()
+        self.data.setSettings(new_settings)
+        self.controller.show_frame(CommitPage)
 
     # Add all settings to grid
     def populate(self):
@@ -126,14 +132,22 @@ class OptionsPage(tk.Frame):
             {"name": "audio"}
         ]
         current_row = 1
+        current_settings = self.data.getSettings()
+        self.entries = {}
         for setting in settings:
-           tk.Label(self.content_frame, text=setting["name"]).grid(row=current_row, column=0)
-           make_entry(self.content_frame, "").grid(row=current_row, column=1)
-           current_row = current_row + 1
+            tk.Label(self.content_frame, text=setting["name"]).grid(row=current_row, column=0)
+            value = tk.StringVar()
+            # Get setting's value from data or default to ""
+            value.set(current_settings.get(setting["name"], ""))
+            # Make entry with default value of settings
+            entry = make_entry(self.content_frame, value.get())
+            entry.grid(row=current_row, column=1)
+            self.entries[setting["name"]] = entry
+            current_row = current_row + 1
 
-        next_button = tk.Button(self.content_frame, text="Next",
-            command=lambda: self.controller.show_frame(CommitPage))
+        next_button = tk.Button(self.content_frame, text="Next", command=self.next_button_callback)
         next_button.grid(row=current_row, column=4)
+
 
 class CommitPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -142,6 +156,11 @@ class CommitPage(tk.Frame):
 
         navbar_frame = tk.Frame(self)
         content_frame = tk.Frame(self)
+
+        settings = data.getSettings()
+        print(settings)
+        #label = tk.Label(content_frame, test=settings['hdmi_safe'])
+        #label.grid(row=1)
 
         navbar(navbar_frame, controller, "Commit Page")
 
@@ -160,7 +179,6 @@ class BackupPage(tk.Frame):
 
         navbar_frame.grid(row=0)
         content_frame.grid(row=1)
-
 
 def make_entry(parent, caption, width=None, **options):
     tk.Label(parent, text=caption)
