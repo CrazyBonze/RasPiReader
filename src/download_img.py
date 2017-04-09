@@ -15,7 +15,7 @@ def img_dir_exists():
 img_dir_exists()
 
 def directory_list():
-    return os.listdir(directory_name)
+    return os.listdir(directory_name) or ['None']
 
 def image_list():
     base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
