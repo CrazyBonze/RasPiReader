@@ -93,14 +93,14 @@ class StartPage(tk.Frame):
         iso_label.grid(row=0, sticky=tk.W)
         self.iso_var = tk.StringVar(self.content_frame)
         ISO_Menu = make_menu(self.content_frame, self.iso_var, directory_list())
-        ISO_Menu.grid(row=0, column=1, columnspan=2, sticky=tk.W)
+        ISO_Menu.grid(row=0, column=1, columnspan=2, sticky="ew")
         self.data.setISOFile(self.iso_var.get())
 
         img_label = tk.Label(self.content_frame, text="get img")
         img_label.grid(row=1, sticky=tk.W)
         self.img_var = tk.StringVar(self.content_frame)
         self.DL_Img_Menu = make_menu(self.content_frame, self.img_var, image_list())
-        self.DL_Img_Menu.grid(row=1, column=1, columnspan=2, sticky=tk.W)
+        self.DL_Img_Menu.grid(row=1, column=1, columnspan=2, sticky="ew")
         DL_img_button = tk.Button(self.content_frame, text="Download",
             command=self.iso_dropdown_callback)
         DL_img_button.grid(row=1, column=3)
@@ -111,20 +111,20 @@ class StartPage(tk.Frame):
         dsk_label.grid(row=2, sticky=tk.W)
         self.dsk_var = tk.StringVar(self.content_frame)
         Disks_Menu = make_menu(self.content_frame, self.dsk_var, list_disks())
-        Disks_Menu.grid(row=2, column=1)
+        Disks_Menu.grid(row=2, column=1, columnspan=2, sticky="ew")
         self.data.setDiskSD(self.dsk_var.get())
 
         wifi_label = tk.Label(self.content_frame, text="wifi ssid")
         wifi_label.grid(row=3, sticky=tk.W)
         self.wifi_var = tk.StringVar(self.content_frame)
         Wifi_Menu = make_menu(self.content_frame, self.wifi_var, ssid_scan())
-        Wifi_Menu.grid(row=3, column=1)
+        Wifi_Menu.grid(row=3, column=1, columnspan=2, sticky="ew")
 
         pswd_label = tk.Label(self.content_frame, text="wifi pass")
         pswd_label.grid(row=4, sticky=tk.W)
         self.pswd_var = tk.StringVar(self.content_frame)
         Pswd_Entry = make_entry(self.content_frame, "hello")
-        Pswd_Entry.grid(row=4, column=1)
+        Pswd_Entry.grid(row=4, column=1, columnspan=2, sticky="ew")
 
         next_button = tk.Button(self.content_frame, text="Next",
                 command=lambda:self.cmd())
