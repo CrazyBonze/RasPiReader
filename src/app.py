@@ -5,6 +5,8 @@ from persistent_data import PersistentData
 from wifi import *
 from download_img import *
 from list_disk import *
+from write_config import *
+from dd import *
 
 LARGE_FONT= ("Verdana", 12)
 
@@ -83,6 +85,9 @@ class StartPage(tk.Frame):
     def onFrameConfigure(self, event):
         self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
+    def iso_dropdown_callback(self):
+        download_iso(self.img_var.get())
+
     def populate(self):
         iso_label = tk.Label(self.content_frame, text="local img")
         iso_label.grid(row=0, sticky=tk.W)
@@ -94,9 +99,13 @@ class StartPage(tk.Frame):
         img_label = tk.Label(self.content_frame, text="get img")
         img_label.grid(row=1, sticky=tk.W)
         self.img_var = tk.StringVar(self.content_frame)
-        DL_Img_Menu = make_menu(self.content_frame, self.img_var, image_list())
-        DL_Img_Menu.grid(row=1, column=1, columnspan=2, sticky=tk.W)
-        self.data.setISODownloadImg(self.img_var.get())
+        self.DL_Img_Menu = make_menu(self.content_frame, self.img_var, image_list())
+        self.DL_Img_Menu.grid(row=1, column=1, columnspan=2, sticky=tk.W)
+        DL_img_button = tk.Button(self.content_frame, text="Download",
+            command=self.iso_dropdown_callback)
+        DL_img_button.grid(row=1, column=3)
+
+        #self.data.setISODownloadImg(self.img_var.get())
 
         dsk_label = tk.Label(self.content_frame, text="SD card")
         dsk_label.grid(row=2, sticky=tk.W)
@@ -191,21 +200,23 @@ class OptionsPage(tk.Frame):
 
 class CommitPage(tk.Frame):
     def __init__(self, parent, controller):
-        data = PersistentData()
+        self.data = PersistentData()
         tk.Frame.__init__(self, parent)
 
         navbar_frame = tk.Frame(self)
         content_frame = tk.Frame(self)
 
-        settings = data.getSettings()
-        print(settings)
-        #label = tk.Label(content_frame, test=settings['hdmi_safe'])
-        #label.grid(row=1)
-
         navbar(navbar_frame, controller, "Commit Page")
+        commit_button = tk.Button(content_frame, text="Commit", command=self.commit_button_callback)
+        commit_button.grid(row=7, column=4)
 
         navbar_frame.grid(row=0)
         content_frame.grid(row=1)
+
+    def commit_button_callback(self):
+        sdcard = self.data.getDiskSD()
+        dd(self.data.getISOFile, sdcard)
+        write_config(sdcard, self.data.getSettings())
 
 class BackupPage(tk.Frame):
     def __init__(self, parent, controller):
