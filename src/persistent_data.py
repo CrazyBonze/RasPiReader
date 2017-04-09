@@ -36,10 +36,12 @@ class PersistentData(Singleton):
         return PersistentData.SSID
 
     def setSettings(self, settings):
+        print(settings)
         PersistentData.Settings = settings
 
     def getSettings(self):
         return PersistentData.Settings
+
     def setDiskSD(self, disk):
         print(disk)
         PersistentData.DiskSD = disk

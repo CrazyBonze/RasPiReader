@@ -86,28 +86,34 @@ class StartPage(tk.Frame):
     def populate(self):
         iso_label = tk.Label(self.content_frame, text="local img")
         iso_label.grid(row=0, sticky=tk.W)
-        iso_var = tk.StringVar(self.content_frame)
-        ISO_Menu = make_menu(self.content_frame, iso_var, directory_list())
+        self.iso_var = tk.StringVar(self.content_frame)
+        ISO_Menu = make_menu(self.content_frame, self.iso_var, directory_list())
         ISO_Menu.grid(row=0, column=1, columnspan=2, sticky=tk.W)
-        self.data.setISOFile(iso_var.get())
+        self.data.setISOFile(self.iso_var.get())
 
         img_label = tk.Label(self.content_frame, text="get img")
         img_label.grid(row=1, sticky=tk.W)
-        img_var = tk.StringVar(self.content_frame)
-        DL_Img_Menu = make_menu(self.content_frame, img_var, image_list())
+        self.img_var = tk.StringVar(self.content_frame)
+        DL_Img_Menu = make_menu(self.content_frame, self.img_var, image_list())
         DL_Img_Menu.grid(row=1, column=1, columnspan=2, sticky=tk.W)
-        self.data.setISODownloadImg(img_var.get())
+        self.data.setISODownloadImg(self.img_var.get())
 
         dsk_label = tk.Label(self.content_frame, text="SD card")
         dsk_label.grid(row=2, sticky=tk.W)
-        dsk_var = tk.StringVar(self.content_frame)
-        Disks_Menu = make_menu(self.content_frame, dsk_var, list_disks())
+        self.dsk_var = tk.StringVar(self.content_frame)
+        Disks_Menu = make_menu(self.content_frame, self.dsk_var, list_disks())
         Disks_Menu.grid(row=2, column=1, columnspan=2, sticky=tk.W)
-        self.data.setDiskSD(dsk_var.get())
+        self.data.setDiskSD(self.dsk_var.get())
 
         next_button = tk.Button(self.content_frame, text="Next",
-            command=lambda: self.controller.show_frame(OptionsPage))
+                command=lambda:self.cmd())
         next_button.grid(row=12, column=12)
+
+    def cmd(self):
+        self.data.setISOFile(self.iso_var.get())
+        self.data.setISODownloadImg(self.img_var.get())
+        self.data.setDiskSD(self.dsk_var.get())
+        self.controller.show_frame(OptionsPage)
 
 class OptionsPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -261,4 +267,5 @@ def make_checkbutton(parent, var, caption, onval=1, offval=0):
             variable=var,
             onvalue=onval,
             offvalue=offval)
+
 
