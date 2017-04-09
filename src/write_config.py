@@ -1,4 +1,4 @@
-import os, platform
+import os, platform, subprocess
 
 def _mount(sdcard):
     system_name = platform.platform()
