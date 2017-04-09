@@ -1,15 +1,17 @@
 #!/usr/bin/python3.5
 #from OS import *
 
-import urllib, urllib2, re, os, zipfile
+import urllib, re, os, zipfile, urllib.request
 
 def image_list():
     base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
 
     # Parse the list of images for the names of all images.
-    url_stream = urllib2.urlopen(base_url)
-    url = url_stream.read()
-    result_list = re.findall('raspbian-20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]\/',url)
+    url_stream = urllib.request.urlopen(base_url)
+    url = url_stream.read().decode('utf-8')
+    result_list1 = re.findall('20[0-9][0-9]-[0-9][0-9]-[0-9][0-9][a-z\-]+\/',url)
+    result_list2 = re.findall('raspbian-20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]\/',url)
+    result_list = result_list1 + result_list2
 
     return result_list;
 
@@ -19,15 +21,15 @@ def download_iso(result):
     directory_name = "images/"
 
     # Parse the list of images for most recent image.
-    # url_stream = urllib2.urlopen(base_url)
-    # url = url_stream.read()
+    # url_stream = urllib.request.urlopen(base_url)
+    # url = url_stream.read().decode('utf-8')
     # result_list = re.findall('raspbian-20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]\/',url)
     # result = result_list[-1]
 
     # Parse the folder for the name of the image name (version number/date).
-    url_download = urllib2.urlopen(base_url + result).read()
-    download_name = re.findall('20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-raspbian-[a-z]+\.zip',url_download)
-    result_download = download_name[-1]
+    url_download = urllib.request.urlopen(base_url + result).read().decode('utf-8')
+    download_name = re.findall('20[0-9][0-9]-[0-9][0-9]-[0-9][0-9][a-z\-]+\.zip',url_download)
+    result_download = download_name[0]
 
     # Check if directory exists and if it doesn't, creates it.
     directory = os.path.dirname(directory_name + result_download)
@@ -35,7 +37,7 @@ def download_iso(result):
         os.makedirs(directory)
 
     # Download the .zip and save it as the image name (version number/date).
-    urllib.urlretrieve(base_url + result + result_download, directory_name + result_download)
+    urllib.request.urlretrieve(base_url + result + result_download, directory_name + result_download)
 
     # Extract the .zip file and save the .img file.
     zip_ref = zipfile.ZipFile(directory_name + result_download, 'r')
@@ -43,3 +45,6 @@ def download_iso(result):
     zip_ref.close()
 
     return;
+
+list_of_things = image_list()
+download_iso(list_of_things[0])
