@@ -7,8 +7,10 @@ base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
 directory_name = "images/"
 
 def img_dir_exists():
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    if not os.path.exists(directory_name):
+        os.makedirs(directory_name)
+
+img_dir_exists()
 
 def image_list():
     base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"

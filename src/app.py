@@ -4,6 +4,7 @@ import tkinter as tk
 from persistent_data import PersistentData
 from wifi import *
 from download_img import *
+from list_disk import *
 
 LARGE_FONT= ("Verdana", 12)
 
@@ -61,8 +62,12 @@ class StartPage(tk.Frame):
 
         ISO_Entry = make_entry(content_frame, "select iso")
         data.setISOFile(ISO_Entry.get())
-        ISO_Entry.grid(row=2, column=0)
+        ISO_Entry.grid(row=0, column=0)
         menu = make_menu(content_frame, image_list())
+        menu.grid(row=1, column=0)
+
+        disks = make_menu(content_frame, list_disks())
+        disks.grid(row=2, column=0)
 
         navbar_frame.grid(row=0)
         content_frame.grid(row=1)

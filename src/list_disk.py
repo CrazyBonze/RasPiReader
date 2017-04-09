@@ -18,5 +18,3 @@ def list_disks():
 
 
 #lsblk -o KNAME,RM
-
-print(list_disks())
