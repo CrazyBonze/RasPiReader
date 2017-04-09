@@ -214,7 +214,7 @@ class CommitPage(tk.Frame):
         content_frame.grid(row=1)
 
     def commit_button_callback(self):
-        sdcard = self.data.getDiskSD()
+        sdcard = "/dev/" + self.data.getDiskSD()
         dd(self.data.getISOFile, sdcard)
         write_config(sdcard, self.data.getSettings())
 
