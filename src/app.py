@@ -79,7 +79,7 @@ class OptionsPage(tk.Frame):
 
         self.scrollbar = tk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
         self.canvas.configure(yscrollcommand = self.scrollbar.set)
-        navbar_frame.grid(row=0)
+        navbar_frame.pack()
         self.scrollbar.pack(side=tk.RIGHT, fill= tk.Y)
         self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         self.canvas.create_window((4,4), window=self.content_frame, anchor="nw")
