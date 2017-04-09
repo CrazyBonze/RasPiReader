@@ -9,24 +9,33 @@ from list_disk import *
 LARGE_FONT= ("Verdana", 12)
 
 def navbar(frame, controller, current_page):
-    #start button
-    button1 = tk.Button(frame, text="Start",
-        command=lambda: controller.show_frame(StartPage))
-    button1.grid(row=0, column=0)
-    #options button
-    button2 = tk.Button(frame, text="Options",
-        command=lambda: controller.show_frame(OptionsPage))
-    button2.grid(row=0, column=1)
-    #commit button
-    button3 = tk.Button(frame, text="Commit",
-        command=lambda: controller.show_frame(CommitPage))
-    button3.grid(row=0, column=2)
-    #backup button
-    button4 = tk.Button(frame, text="Backup",
-        command=lambda: controller.show_frame(BackupPage))
-    button4.grid(row=0, column=3)
+    buttons = [
+        {
+            "name": "Start",
+            "page": StartPage
+        },
+        {
+            "name": "Options",
+            "page": OptionsPage
+        },
+        {
+            "name": "Commit",
+            "page": CommitPage
+        },
+        {
+            "name": "Backup",
+            "page": BackupPage
+        }
+    ]
+    current_column = 0
+    for button in buttons:
+        # The lambda binds to button so it will not be overwritten on next iteration.
+        b = tk.Button(frame, text=button["name"], command=lambda button=button: controller.show_frame(button["page"]))
+        b.grid(row=0, column=current_column)
+        current_column = current_column + 1
+    
     label = tk.Label(frame, text=current_page, font=LARGE_FONT)
-    label.grid(row=0, column=4)
+    label.grid(row=0, column=current_column)
 
 class App(tk.Tk):
     def __init__(self, *args, **kwargs):
@@ -127,9 +136,9 @@ class OptionsPage(tk.Frame):
            make_entry(self.content_frame, "").grid(row=current_row, column=1)
            current_row = current_row + 1
 
-        button1 = tk.Button(self.content_frame, text="Next",
+        next_button = tk.Button(self.content_frame, text="Next",
             command=lambda: self.controller.show_frame(CommitPage))
-        button1.grid(row=current_row, column=4)
+        next_button.grid(row=current_row, column=4)
 
 class CommitPage(tk.Frame):
     def __init__(self, parent, controller):
