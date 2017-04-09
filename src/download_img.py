@@ -3,6 +3,13 @@
 
 import urllib, re, os, zipfile, urllib.request
 
+base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
+directory_name = "images/"
+
+def img_dir_exists():
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
 def image_list():
     base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
 
@@ -17,8 +24,6 @@ def image_list():
 
 # result is a member of result_list from image_list().
 def download_iso(result):
-    base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
-    directory_name = "images/"
 
     # Parse the list of images for most recent image.
     # url_stream = urllib.request.urlopen(base_url)
