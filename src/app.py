@@ -54,9 +54,8 @@ class StartPage(tk.Frame):
         ISO_Entry.pack(anchor=tk.W)
         data.setISOFile(ISO_Entry.get())
 
-        var = tk.StringVar(self)
-        option = tk.OptionMenu(self, var, "one", "two", "three")
-        option.pack()
+        ISO_Menue = makemenue(self, "one", "two")
+        ISO_Menue.pack()
 
 
 
@@ -142,3 +141,10 @@ def makeentry(parent, caption, width=None, **options):
     if width:
         entry.config(width=sidth)
     return entry
+
+def makemenue(parent, **options):
+    var = tk.StringVar(parent)
+
+        #var = tk.StringVar(self)
+        #option = tk.OptionMenu(self, var, "one", "two", "three")
+        #option.pack()
