@@ -1,0 +1,57 @@
+#:kivy 1.10.0
+
+FloatLayout:
+  AnchorLayout:
+    anchor_x: "center"
+    anchor_y: "top"
+    Label:
+      size_hint: 1, 0.1
+      id: header
+      text: "My App"
+  AnchorLayout:
+    AnchorLayout:
+      anchor_x: "center"
+      anchor_y: "center"
+
+      ScreenManager:
+        id: manager
+        size_hint: 1, .8
+        StartPage:
+          name: "startpage"
+          Label:
+            text: "StartPage"
+
+        OptionsPage:
+          name: "optionspage"
+          Label:
+            text: "OptionsPage"
+
+        CommitPage:
+          name: "commitpage"
+          Label:
+            text: "CommitPage"
+
+        BackupPage:
+          name: "backuppage"
+          Label:
+            text: "BackupPage"
+
+  AnchorLayout:
+    anchor_x: "center"
+    anchor_y: "bottom"
+    BoxLayout:
+      orientation: "horizontal"
+      size_hint: 1, 0.1
+      Button:
+        text: "Start"
+        on_press: root.ids.manager.current = "startpage"
+      Button:
+        text: "Options"
+        on_press: root.ids.manager.current = "optionspage"
+      Button:
+        text: "Commit"
+        on_press: root.ids.manager.current = "commitpage"
+      Button:
+        text: "Backup"
+        on_press: root.ids.manager.current = "backuppage"
+
