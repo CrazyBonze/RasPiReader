@@ -48,3 +48,6 @@ class PersistentData(Singleton):
 
     def getDiskSD(self):
         return PersistentData.DiskSD
+
+    def writeToFile(self, f):
+        print(f)

@@ -1,57 +1,85 @@
 #:kivy 1.10.0
 
-FloatLayout:
-  AnchorLayout:
-    anchor_x: "center"
-    anchor_y: "top"
-    Label:
-      size_hint: 1, 0.1
-      id: header
-      text: "My App"
-  AnchorLayout:
-    AnchorLayout:
-      anchor_x: "center"
-      anchor_y: "center"
 
-      ScreenManager:
-        id: manager
-        size_hint: 1, .8
-        StartPage:
-          name: "startpage"
-          Label:
-            text: "StartPage"
-
-        OptionsPage:
-          name: "optionspage"
-          Label:
-            text: "OptionsPage"
-
-        CommitPage:
-          name: "commitpage"
-          Label:
-            text: "CommitPage"
-
-        BackupPage:
-          name: "backuppage"
-          Label:
-            text: "BackupPage"
-
-  AnchorLayout:
-    anchor_x: "center"
-    anchor_y: "bottom"
-    BoxLayout:
-      orientation: "horizontal"
-      size_hint: 1, 0.1
+<RootWidget>:
+  id: rootwidget
+  Header:
+    id: header
+    HeaderButtons:
       Button:
         text: "Start"
-        on_press: root.ids.manager.current = "startpage"
+        on_press: root.ids.pagemanager.current = "startpage"
       Button:
         text: "Options"
-        on_press: root.ids.manager.current = "optionspage"
+        on_press: root.ids.pagemanager.current = "optionspage"
       Button:
         text: "Commit"
-        on_press: root.ids.manager.current = "commitpage"
+        on_press: root.ids.pagemanager.current = "commitpage"
       Button:
-        text: "Backup"
-        on_press: root.ids.manager.current = "backuppage"
+        text: "Options"
+        on_press: root.ids.pagemanager.current = "backuppage"
+  PageLayer:
+    id: pagelayer
+    PageManager:
+      id: pagemanager
+      StartPage:
+        id: sp
+        Button:
+          text: "Print to screen"
+          on_press: root.ids.sp.print_to_screen()
+      OptionsPage:
+        id: op
+      CommitPage:
+        id: cp
+      BackupPage:
+        id: bp
+  Footer:
+    id: footer
+    FooterButtons:
+      Button:
+        text: "hello"
+        on_press: root.print_to_screen("hello")
+
+<HeaderButtons>:
+  orientation: "horizontal"
+  size_hint: 1, 0.1
+
+<Header>:
+  anchor_x: "center"
+  anchor_y: "top"
+
+<PageLayer>:
+  anchor_x: "center"
+  anchor_y: "center"
+
+<FooterButtons>:
+  orientation: "horizontal"
+  size_hint: 1, 0.1
+
+<Footer>:
+  anchor_x: "center"
+  anchor_y: "bottom"
+
+<PageManager>:
+  size_hint: 1, .8
+
+<StartPage>:
+  name: "startpage"
+  Label:
+    text: "Start Page"
+
+<OptionsPage>:
+  name: "optionspage"
+  Label:
+    text: "Options Page"
+
+<CommitPage>:
+  name: "commitpage"
+  Label:
+    text: "Commit Page"
+
+<BackupPage>:
+  name: "backuppage"
+  Label:
+    text: "Backup Page"
 
