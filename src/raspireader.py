@@ -7,11 +7,32 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.properties import StringProperty
+from kivy.uix.popup import Popup
+from kivy.properties import ObjectProperty
+from os.path import dirname
 
 # Persistent Data
 from persistent_data import PersistentData
 data = PersistentData()
+
+class LoadDialog(Popup):
+    def load(self, path, selection):
+        self.choosen_file = [None, ]
+        self.choosen_file = selection
+        self.dismiss()
+
+    def cancel(self):
+        self.dismiss()
+
+class SaveDialog(Popup):
+    def save(self, path, selection):
+        _file = codect.open(selection, 'w', encoding='utf8')
+        _file.write(self.text)
+        _file.close()
+        self.dismiss()
+
+    def cancel(self):
+        self.dismiss()
 
 class HeaderButtons(BoxLayout):
     pass
@@ -29,6 +50,8 @@ class Footer(AnchorLayout):
     pass
 
 class RootWidget(FloatLayout):
+    loadfile = ObjectProperty(None)
+    savefile = ObjectProperty(None)
     def print_to_screen(self, txt):
         data.writeToFile(txt)
         #print(txt)
@@ -38,7 +61,13 @@ class PageManager(ScreenManager):
 
 class StartPage(Screen):
     def print_to_screen(self):
+        curdir = dirname(__file__)
+        print(curdir)
         print("hello world")
+    def file_pick(self):
+        self.load_dialog = LoadDialog()
+        self.load_dialog.open()
+
 
 class OptionsPage(Screen):
     pass
