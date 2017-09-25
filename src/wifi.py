@@ -1,4 +1,5 @@
 import platform, subprocess
+import re
 
 def _linux():
     wlan = ls_wireless_devices()
@@ -18,7 +19,7 @@ def _linux():
     p2.stdout.close()
     p3.stdout.close()
     output, err = p4.communicate()
-    lst = output.decode('utf-8').split()
+    lst = [f[1:-1] for f in re.findall('".+?"', output.decode('utf-8'))]
     for idx,ssid in enumerate(lst):
         if ssid.startswith('"') and ssid.endswith('"'):
             lst[idx] = ssid[1:-1]
@@ -36,6 +37,7 @@ def _darwin():
     return output.decode('utf-8').split() or ["None"]
 
 def ls_wireless_devices():
+    #TODO handle no device
     p1 = subprocess.Popen(["iw", "dev"], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(["awk", '$1==\"Interface\"{print $2}'], stdin=p1.stdout, stdout=subprocess.PIPE)
     out, err = p2.communicate()
@@ -51,6 +53,6 @@ def ssid_scan():
     return ssids
 
 if __name__ == '__main__':
+    print(ls_wireless_devices())
     ssids = ssid_scan()
     print(ssids)
-    print(ls_wireless_devices())
