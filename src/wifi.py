@@ -1,15 +1,16 @@
 import platform, subprocess
 
 def _linux():
+    wlan = ls_wireless_devices()
     p001 = subprocess.Popen(["ifconfig"], stdout=subprocess.PIPE)
-    p002 = subprocess.Popen(["grep", "wlan0"], stdin=p001.stdout,stdout=subprocess.PIPE)
+    p002 = subprocess.Popen(["grep", wlan], stdin=p001.stdout,stdout=subprocess.PIPE)
     output001, err001 = p002.communicate()
     p001.stdout.close()
     if output001.decode('utf-8') == "":
         not_found = ["Wifi Not Found"]
         return not_found;
 
-    p1 = subprocess.Popen(["iwlist", "wlan0", "scan"], stdout=subprocess.PIPE)
+    p1 = subprocess.Popen(["iwlist", wlan, "scan"], stdout=subprocess.PIPE)
     p2 = subprocess.Popen(["grep", "ESSID"], stdin=p1.stdout, stdout=subprocess.PIPE)
     p3 = subprocess.Popen(["sort", "-u"], stdin=p2.stdout, stdout=subprocess.PIPE)
     p4 = subprocess.Popen(["awk", "-F:", "{print $2}"], stdin=p3.stdout, stdout=subprocess.PIPE)
@@ -34,6 +35,12 @@ def _darwin():
     output, err = p4.communicate()
     return output.decode('utf-8').split() or ["None"]
 
+def ls_wireless_devices():
+    p1 = subprocess.Popen(["iw", "dev"], stdout=subprocess.PIPE)
+    p2 = subprocess.Popen(["awk", '$1==\"Interface\"{print $2}'], stdin=p1.stdout, stdout=subprocess.PIPE)
+    out, err = p2.communicate()
+    return out.decode().strip()
+
 def ssid_scan():
     system = platform.system()
     ssids = []
@@ -46,3 +53,4 @@ def ssid_scan():
 if __name__ == '__main__':
     ssids = ssid_scan()
     print(ssids)
+    print(ls_wireless_devices())

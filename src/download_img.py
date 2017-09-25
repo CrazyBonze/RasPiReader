@@ -63,3 +63,8 @@ def download_iso(result):
     zip_ref.close()
 
     return;
+
+
+if __name__ == '__main__':
+    print(image_list())
+    print(directory_list())

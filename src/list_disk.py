@@ -24,3 +24,6 @@ def list_disks():
 
 
 #lsblk -o KNAME,RM
+
+if __name__ == '__main__':
+    print(list_disks())
