@@ -11,10 +11,10 @@ def main():
     app.add_argument('--version', action='version', version='%(prog)s 0.1')
 
     #TODO check for sudo disable command line argument
-    if os.geteuid() != 0:
-        exit("Needs root permissions to berform dd operations.")
-    else:
-        print("Passed root check.")
+    #if os.geteuid() != 0:
+        #exit("Needs root permissions to berform dd operations.")
+    #else:
+        #print("Passed root check.")
 
     #TODO run in debug mode if command line argument exists
     RasPiReaderApp().run()
