@@ -89,16 +89,33 @@
         size_hint: 0.2, None
         height: '32dp'
         text: "Download"
-      TextInput:
+      Button:
         size_hint: .6, None
         height: '32dp'
-        multiline: False
-        disabled: True
         text: "some stuff"
+        on_release: root.download_pick()
       Button:
         size_hint: .2, None
         height: '32dp'
         text: "Download"
+
+<DownloadISODialog>:
+  title: "Pick image"
+  choosen_file: None
+  BoxLayout:
+    size: root.size
+    pos: root.pos
+    orientation: "vertical"
+    #SelectableView:
+    Label:
+      id: imagechooser
+      text: "Hello"
+    BoxLayout:
+      size_hint_y: None
+      height: 30
+      Button:
+        text: "Pick"
+        on_release: root.load()
 
 <LoadISODialog>:
   title: filechooser.path

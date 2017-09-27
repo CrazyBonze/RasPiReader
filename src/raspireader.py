@@ -6,15 +6,21 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.selectableview import SelectableView
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.core.window import Window
-import os, errno
+import os
+from download_img import *
 
 # Persistent Data
 from persistent_data import PersistentData
 data = PersistentData()
+
+class DownloadISODialog(Popup):
+    def load(self):
+        self.dismiss()
 
 class LoadISODialog(Popup):
     def load(self, path, selection):
@@ -63,9 +69,6 @@ class PageManager(ScreenManager):
 
 class StartPage(Screen):
     iso_file = StringProperty(data.getISOFile())
-    def update(self):
-        self.iso_file = data.getISOFile()
-
     def get_iso_file(self):
         return data.getISOFile()
 
@@ -73,7 +76,11 @@ class StartPage(Screen):
         self.load_dialog = LoadISODialog()
         self.load_dialog.open()
         self.load_dialog.bind(choosen_file=self.setter('iso_file'))
-        self.update()
+
+    def download_pick(self):
+        self.download_dialog = DownloadISODialog()
+        self.download_dialog.open()
+
 
 
 class OptionsPage(Screen):
@@ -87,10 +94,6 @@ class BackupPage(Screen):
 
 class RasPiReaderApp(App):
     def build(self):
-        try:
-            os.makedirs('images')
-        except OSError as e:
-            if e.errno != errno.EEXIST:
-                raise
+        img_dir_exists()
         root = RootWidget()
         return root
