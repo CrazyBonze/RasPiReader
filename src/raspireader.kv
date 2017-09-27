@@ -25,9 +25,6 @@
       id: pagemanager
       StartPage:
         id: sp
-        #Button:
-          #text: "Print to screen"
-          #on_press: root.ids.sp.print_to_screen()
       OptionsPage:
         id: op
       CommitPage:
@@ -38,8 +35,8 @@
     id: footer
     FooterButtons:
       Button:
-        text: "hello"
-        on_press: root.print_to_screen("hello")
+        text: "Print To Screen"
+        on_press: root.print_to_screen()
 
 <HeaderButtons>:
   orientation: "horizontal"
@@ -71,26 +68,48 @@
     Label:
       size_hint: 1, 0.1
       text: "Start Page"
-    GridLayout:
-      cols: 3
+    StackLayout:
       Label:
+        size_hint: 0.2, None
+        height: '32dp'
         text: "Image"
-      Label:
-        text: "No Image"
+      TextInput:
+        size_hint: .6, None
+        height: '32dp'
+        multiline: False
+        disabled: True
+        id: iso_label
+        text: root.iso_file
       Button:
+        size_hint: .2, None
+        height: '32dp'
         text: "Load"
         on_release: root.file_pick()
+      Label:
+        size_hint: 0.2, None
+        height: '32dp'
+        text: "Download"
+      TextInput:
+        size_hint: .6, None
+        height: '32dp'
+        multiline: False
+        disabled: True
+        text: "some stuff"
+      Button:
+        size_hint: .2, None
+        height: '32dp'
+        text: "Download"
 
-<LoadDialog>:
+<LoadISODialog>:
   title: filechooser.path
-  chossen_file: None
+  choosen_file: None
   BoxLayout:
     size: root.size
     pos: root.pos
     orientation: "vertical"
     FileChooserListView:
       id: filechooser
-      path: os.getcwd()
+      path: os.getcwd()+'/images'
     BoxLayout:
       size_hint_y: None
       height: 30

@@ -8,19 +8,21 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivy.core.window import Window
-import os
+import os, errno
 
 # Persistent Data
 from persistent_data import PersistentData
 data = PersistentData()
 
-class LoadDialog(Popup):
+class LoadISODialog(Popup):
     def load(self, path, selection):
-        self.choosen_file = [None, ]
-        self.choosen_file = selection
+        if not selection:
+            return
+        self.choosen_file = selection[0]
         Window.title = selection[0][selection[0].rfind(os.sep) + 1:]
+        data.setISOFile(selection[0])
         self.dismiss()
 
     def cancel(self):
@@ -53,24 +55,25 @@ class Footer(AnchorLayout):
     pass
 
 class RootWidget(FloatLayout):
-    loadiso = ObjectProperty(None)
-    loadfile = ObjectProperty(None)
-    savefile = ObjectProperty(None)
-    def print_to_screen(self, txt):
-        data.writeToFile(txt)
-        #print(txt)
+    def print_to_screen(self):
+        data.print_to_screen()
 
 class PageManager(ScreenManager):
     pass
 
 class StartPage(Screen):
-    def print_to_screen(self):
-        curdir = dirname(__file__)
-        print(curdir)
-        print("hello world")
+    iso_file = StringProperty(data.getISOFile())
+    def update(self):
+        self.iso_file = data.getISOFile()
+
+    def get_iso_file(self):
+        return data.getISOFile()
+
     def file_pick(self):
-        self.load_dialog = LoadDialog()
+        self.load_dialog = LoadISODialog()
         self.load_dialog.open()
+        self.load_dialog.bind(choosen_file=self.setter('iso_file'))
+        self.update()
 
 
 class OptionsPage(Screen):
@@ -84,5 +87,10 @@ class BackupPage(Screen):
 
 class RasPiReaderApp(App):
     def build(self):
+        try:
+            os.makedirs('images')
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
         root = RootWidget()
         return root

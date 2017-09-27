@@ -8,42 +8,37 @@ class Singleton(object):
 class PersistentData(Singleton):
     pass
 
-    ISOFile = ""
+    ISOFile = "None"
     ISODownloadImg = ""
     Settings = {}
     DiskSD = ""
     WIFI = {}
 
     def setISOFile(self, f):
-        print(f)
         PersistentData.ISOFile = f
 
     def getISOFile(self):
         return PersistentData.ISOFile
 
     def setISODownloadImg(self, iso):
-        print(iso)
         PersistentData.ISODownloadImg = iso
 
     def getISODownloadImg(self):
         return PersistentData.ISODownloadImg
 
     def setWIFI(self, wifi):
-        print(wifi)
         PersistentData.WIFI = wifi
 
     def getWIFI(self):
         return PersistentData.WIFI
 
     def setSettings(self, settings):
-        print(settings)
         PersistentData.Settings = settings
 
     def getSettings(self):
         return PersistentData.Settings
 
     def setDiskSD(self, disk):
-        print(disk)
         PersistentData.DiskSD = disk
 
     def getDiskSD(self):
@@ -51,3 +46,6 @@ class PersistentData(Singleton):
 
     def writeToFile(self, f):
         print(f)
+
+    def print_to_screen(self):
+        print('ISOFile:\t{0}'.format(PersistentData.ISOFile))
