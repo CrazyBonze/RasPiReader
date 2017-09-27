@@ -1,7 +1,6 @@
 #!/usr/bin/python3.5
-#from OS import *
 
-import urllib, re, os, zipfile, urllib.request
+import urllib, re, os, zipfile, urllib.request, errno
 from os import listdir
 from os.path import isfile, join
 
@@ -10,7 +9,11 @@ directory_name = "images/"
 
 def img_dir_exists():
     if not os.path.exists(directory_name):
-        os.makedirs(directory_name)
+        try:
+            os.makedirs(directory_name)
+        except OSError as e:
+            if e.errno != errno.EEXIST:
+                raise
 
 img_dir_exists()
 
@@ -22,6 +25,9 @@ def directory_list():
             ls_of_imgs = ls_of_imgs + [x]
     ls_of_imgs = ["None"] + ls_of_imgs
     return ls_of_imgs;
+
+def fake_image_list():
+    return ['None', 'raspbian-2017-09-08/', 'raspbian-2017-08-17/', 'raspbian-2017-07-05/', 'raspbian-2017-06-23/', 'raspbian-2017-04-10/', 'raspbian-2017-03-03/', 'raspbian-2017-02-27/', 'raspbian-2017-01-10/', 'raspbian-2016-11-29/', 'raspbian-2016-09-28/', 'raspbian-2016-05-31/', 'raspbian-2016-05-13/', 'raspbian-2016-03-18/', 'raspbian-2016-02-29/', 'raspbian-2016-02-09/', 'raspbian-2016-02-08/', 'raspbian-2015-11-24/', 'raspbian-2015-09-28/', 'raspbian-2015-05-07/', 'raspbian-2015-02-17/', 'raspbian-2015-02-02/', 'raspbian-2014-12-25/', 'raspbian-2014-09-12/', 'raspbian-2014-06-22/', 'raspbian-2014-01-09/', 'raspbian-2013-12-24/', 'raspbian-2013-10-07/', 'raspbian-2013-09-27/', 'raspbian-2013-09-16/', '2013-07-26-wheezy-raspbian/', '2013-05-25-wheezy-raspbian/', '2013-05-25-wheezy-raspbian-shrunk/', '2013-02-09-wheezy-raspbian/', '2012-12-16-wheezy-raspbian/', '2012-12-15-wheezy-raspbian/', '2012-10-28-wheezy-raspbian/', '2012-09-18-wheezy-raspbian/', '2012-08-16-wheezy-raspbian/', '2012-07-15-wheezy-raspbian/']
 
 def image_list():
     base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
@@ -58,13 +64,24 @@ def download_iso(result):
     urllib.request.urlretrieve(base_url + result + result_download, directory_name + result_download)
 
     # Extract the .zip file and save the .img file.
-    zip_ref = zipfile.ZipFile(directory_name + result_download, 'r')
-    zip_ref.extractall(directory_name)
-    zip_ref.close()
+    unzip(directory, result_download)
+    #zip_ref = zipfile.ZipFile(directory_name + result_download, 'r')
+    #zip_ref.extractall(directory_name)
+    #zip_ref.close()
 
     return;
 
+def unzip(path, f):
+    zip_ref = zipfile.ZipFile(path + f, 'r')
+    zip_ref.extractall(path)
+    zip_ref.close()
+
+
 
 if __name__ == '__main__':
-    print(image_list())
+    img = image_list()
+    print(img)
     print(directory_list())
+    print(img[1])
+    print(fake_image_list())
+    #download_iso(img[1])
