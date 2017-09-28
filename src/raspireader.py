@@ -19,6 +19,9 @@ from persistent_data import PersistentData
 data = PersistentData()
 
 class DownloadISODialog(Popup):
+    def getdownloadlist(self):
+        return image_list()
+
     def load(self):
         self.dismiss()
 

@@ -106,10 +106,9 @@
     size: root.size
     pos: root.pos
     orientation: "vertical"
-    #SelectableView:
-    Label:
+    ListView:
       id: imagechooser
-      text: "Hello"
+      item_strings: root.getdownloadlist()
     BoxLayout:
       size_hint_y: None
       height: 30
