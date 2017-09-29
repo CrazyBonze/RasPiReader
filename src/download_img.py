@@ -7,6 +7,8 @@ from os.path import isfile, join
 base_url = "http://vx2-downloads.raspberrypi.org/raspbian/images/"
 directory_name = "images/"
 
+import time
+
 def img_dir_exists():
     if not os.path.exists(directory_name):
         try:
@@ -27,6 +29,7 @@ def directory_list():
     return ls_of_imgs;
 
 def fake_image_list():
+    time.sleep(5)
     return ['None', 'raspbian-2017-09-08/', 'raspbian-2017-08-17/', 'raspbian-2017-07-05/', 'raspbian-2017-06-23/', 'raspbian-2017-04-10/', 'raspbian-2017-03-03/', 'raspbian-2017-02-27/', 'raspbian-2017-01-10/', 'raspbian-2016-11-29/', 'raspbian-2016-09-28/', 'raspbian-2016-05-31/', 'raspbian-2016-05-13/', 'raspbian-2016-03-18/', 'raspbian-2016-02-29/', 'raspbian-2016-02-09/', 'raspbian-2016-02-08/', 'raspbian-2015-11-24/', 'raspbian-2015-09-28/', 'raspbian-2015-05-07/', 'raspbian-2015-02-17/', 'raspbian-2015-02-02/', 'raspbian-2014-12-25/', 'raspbian-2014-09-12/', 'raspbian-2014-06-22/', 'raspbian-2014-01-09/', 'raspbian-2013-12-24/', 'raspbian-2013-10-07/', 'raspbian-2013-09-27/', 'raspbian-2013-09-16/', '2013-07-26-wheezy-raspbian/', '2013-05-25-wheezy-raspbian/', '2013-05-25-wheezy-raspbian-shrunk/', '2013-02-09-wheezy-raspbian/', '2012-12-16-wheezy-raspbian/', '2012-12-15-wheezy-raspbian/', '2012-10-28-wheezy-raspbian/', '2012-09-18-wheezy-raspbian/', '2012-08-16-wheezy-raspbian/', '2012-07-15-wheezy-raspbian/']
 
 def image_list():

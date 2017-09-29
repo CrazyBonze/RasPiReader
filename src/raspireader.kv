@@ -102,13 +102,14 @@
 <DownloadISODialog>:
   title: "Pick image"
   choosen_file: None
+  #item_list: None
   BoxLayout:
     size: root.size
     pos: root.pos
     orientation: "vertical"
     ListView:
       id: imagechooser
-      item_strings: root.getdownloadlist()
+      item_strings: root.item_list #root.getdownloadlist()
     BoxLayout:
       size_hint_y: None
       height: 30

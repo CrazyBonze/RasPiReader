@@ -11,7 +11,8 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.core.window import Window
-import os
+import os, threading
+from threading import Thread
 from download_img import *
 
 # Persistent Data
@@ -19,8 +20,14 @@ from persistent_data import PersistentData
 data = PersistentData()
 
 class DownloadISODialog(Popup):
+    item_list = ['Loading']
     def getdownloadlist(self):
-        return image_list()
+        Thread(target=self.worker).start()
+
+    def worker(self):
+        self.item_list = fake_image_list()
+        print(self.item_list)
+        self.item_strings = self.item_list
 
     def load(self):
         self.dismiss()
@@ -64,6 +71,7 @@ class Footer(AnchorLayout):
     pass
 
 class RootWidget(FloatLayout):
+    stop = threading.Event()
     def print_to_screen(self):
         data.print_to_screen()
 
@@ -83,6 +91,7 @@ class StartPage(Screen):
     def download_pick(self):
         self.download_dialog = DownloadISODialog()
         self.download_dialog.open()
+        self.download_dialog.getdownloadlist()
 
 
 
