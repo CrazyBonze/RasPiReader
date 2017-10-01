@@ -9,7 +9,7 @@ class PersistentData(Singleton):
     pass
 
     ISOFile = "None"
-    ISODownloadImg = ""
+    DownloadImg = []
     Settings = {}
     DiskSD = ""
     WIFI = {}
@@ -20,11 +20,11 @@ class PersistentData(Singleton):
     def getISOFile(self):
         return PersistentData.ISOFile
 
-    def setISODownloadImg(self, iso):
-        PersistentData.ISODownloadImg = iso
+    def setDownloadImg(self, iso):
+        PersistentData.DownloadImg = iso
 
-    def getISODownloadImg(self):
-        return PersistentData.ISODownloadImg
+    def getDownloadImg(self):
+        return PersistentData.DownloadImg
 
     def setWIFI(self, wifi):
         PersistentData.WIFI = wifi

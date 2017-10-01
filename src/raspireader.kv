@@ -92,7 +92,7 @@
       Button:
         size_hint: .6, None
         height: '32dp'
-        text: "some stuff"
+        text: "Pick Image"
         on_release: root.download_pick()
       Button:
         size_hint: .2, None
@@ -101,21 +101,20 @@
 
 <DownloadISODialog>:
   title: "Pick image"
-  choosen_file: None
-  #item_list: None
   BoxLayout:
     size: root.size
     pos: root.pos
     orientation: "vertical"
-    ListView:
-      id: imagechooser
-      item_strings: root.item_list #root.getdownloadlist()
+    ScrollView:
+      id: scroll_view
+      size: self.size
+
     BoxLayout:
       size_hint_y: None
       height: 30
       Button:
-        text: "Pick"
-        on_release: root.load()
+        text: "Cancel"
+        on_release: root.cancel()
 
 <LoadISODialog>:
   title: filechooser.path

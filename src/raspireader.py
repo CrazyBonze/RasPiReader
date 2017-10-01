@@ -6,11 +6,14 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 from kivy.uix.selectableview import SelectableView
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
+from kivy.uix.scrollview import ScrollView
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.core.window import Window
+from kivy.adapters.listadapter import ListAdapter
 import os, threading
 from threading import Thread
 from download_img import *
@@ -20,16 +23,37 @@ from persistent_data import PersistentData
 data = PersistentData()
 
 class DownloadISODialog(Popup):
-    item_list = ['Loading']
     def getdownloadlist(self):
-        Thread(target=self.worker).start()
+        download_list = data.getDownloadImg()
+        if not download_list:
+            print("Fetching download list")
+            self.ids.scroll_view.add_widget(Label(text='Loading'))
+            Thread(target=self.worker).start()
+        else:
+            print("already fetched download list")
+            self.layout = GridLayout(cols=1, size_hint_y=None)
+            self.layout.bind(minimum_height=self.layout.setter('height'))
+            for i in download_list:
+                #print(i)
+                btn = Button(text=i, size_hint_y=None, height=30)
+                self.layout.add_widget(btn)
+            self.ids.scroll_view.add_widget(self.layout)
+
 
     def worker(self):
-        self.item_list = fake_image_list()
-        print(self.item_list)
-        self.item_strings = self.item_list
+        images = image_list()
+        data.setDownloadImg(images)
+        self.layout = GridLayout(cols=1, size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter('height'))
+        for i in images:
+            #print(i)
+            btn = Button(text=i, size_hint_y=None, height=30)
+            self.layout.add_widget(btn)
+        self.ids.scroll_view.clear_widgets()
+        self.ids.scroll_view.add_widget(self.layout)
 
-    def load(self):
+
+    def cancel(self):
         self.dismiss()
 
 class LoadISODialog(Popup):
