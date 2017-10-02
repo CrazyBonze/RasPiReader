@@ -23,12 +23,7 @@ from persistent_data import PersistentData
 data = PersistentData()
 
 class DownloadButton(Button):
-    pass
     image = StringProperty()
-
-    def newImage(self, img):
-        print(img)
-        image = img
 
 class DownloadISODialog(Popup):
     def getdownloadlist(self):
@@ -47,7 +42,6 @@ class DownloadISODialog(Popup):
                 btn.image = i
                 self.layout.add_widget(btn)
 
-
     def worker(self):
         images = fake_image_list()
         self.ids.scroll_view.clear_widgets()
@@ -58,12 +52,10 @@ class DownloadISODialog(Popup):
         for i in images:
             btn = DownloadButton()
             btn.image = i
-            #btn.bind(on_release= lambda x:btn.newImage(i))
             self.layout.add_widget(btn)
 
     def setDLImage(self, img):
         self.dl_image = img
-        print(img)
         self.dismiss()
 
     def cancel(self):

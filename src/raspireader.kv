@@ -104,9 +104,10 @@
   text: root.image
   size_hint_y: None
   height: 30
-  on_release: print(root.image)
+  on_release: app.root.DLISODialog.setDLImage(root.image)
 
 <DownloadISODialog>:
+  on_open: app.root.DLISODialog=self
   id: DLISODialog
   title: "Pick image"
   dl_image: None
