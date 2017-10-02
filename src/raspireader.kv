@@ -92,15 +92,24 @@
       Button:
         size_hint: .6, None
         height: '32dp'
-        text: "Pick Image"
+        id: download_image
+        text: root.download_file
         on_release: root.download_pick()
       Button:
         size_hint: .2, None
         height: '32dp'
         text: "Download"
 
+<DownloadButton>:
+  text: root.image
+  size_hint_y: None
+  height: 30
+  on_release: print(root.image)
+
 <DownloadISODialog>:
+  id: DLISODialog
   title: "Pick image"
+  dl_image: None
   BoxLayout:
     size: root.size
     pos: root.pos

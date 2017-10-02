@@ -22,36 +22,49 @@ from download_img import *
 from persistent_data import PersistentData
 data = PersistentData()
 
+class DownloadButton(Button):
+    pass
+    image = StringProperty()
+
+    def newImage(self, img):
+        print(img)
+        image = img
+
 class DownloadISODialog(Popup):
     def getdownloadlist(self):
         download_list = data.getDownloadImg()
         if not download_list:
             print("Fetching download list")
-            self.ids.scroll_view.add_widget(Label(text='Loading'))
+            self.ids.scroll_view.add_widget(Label(text='Loading...'))
             Thread(target=self.worker).start()
         else:
             print("already fetched download list")
             self.layout = GridLayout(cols=1, size_hint_y=None)
             self.layout.bind(minimum_height=self.layout.setter('height'))
-            for i in download_list:
-                #print(i)
-                btn = Button(text=i, size_hint_y=None, height=30)
-                self.layout.add_widget(btn)
             self.ids.scroll_view.add_widget(self.layout)
+            for i in download_list:
+                btn = DownloadButton()
+                btn.image = i
+                self.layout.add_widget(btn)
 
 
     def worker(self):
-        images = image_list()
+        images = fake_image_list()
+        self.ids.scroll_view.clear_widgets()
         data.setDownloadImg(images)
         self.layout = GridLayout(cols=1, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
-        for i in images:
-            #print(i)
-            btn = Button(text=i, size_hint_y=None, height=30)
-            self.layout.add_widget(btn)
-        self.ids.scroll_view.clear_widgets()
         self.ids.scroll_view.add_widget(self.layout)
+        for i in images:
+            btn = DownloadButton()
+            btn.image = i
+            #btn.bind(on_release= lambda x:btn.newImage(i))
+            self.layout.add_widget(btn)
 
+    def setDLImage(self, img):
+        self.dl_image = img
+        print(img)
+        self.dismiss()
 
     def cancel(self):
         self.dismiss()
@@ -103,7 +116,8 @@ class PageManager(ScreenManager):
     pass
 
 class StartPage(Screen):
-    iso_file = StringProperty(data.getISOFile())
+    iso_file = StringProperty('No Image Chosen')
+    download_file = StringProperty('Pick Image')
     def get_iso_file(self):
         return data.getISOFile()
 
@@ -115,6 +129,7 @@ class StartPage(Screen):
     def download_pick(self):
         self.download_dialog = DownloadISODialog()
         self.download_dialog.open()
+        self.download_dialog.bind(dl_image=self.setter('download_file'))
         self.download_dialog.getdownloadlist()
 
 

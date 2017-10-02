@@ -8,7 +8,7 @@ class Singleton(object):
 class PersistentData(Singleton):
     pass
 
-    ISOFile = "None"
+    ISOFile = ""
     DownloadImg = []
     Settings = {}
     DiskSD = ""
@@ -49,3 +49,4 @@ class PersistentData(Singleton):
 
     def print_to_screen(self):
         print('ISOFile:\t{0}'.format(PersistentData.ISOFile))
+        print('Settings:\t{0}'.format(PersistentData.Settings))
