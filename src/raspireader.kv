@@ -99,6 +99,31 @@
         size_hint: .2, None
         height: '32dp'
         text: "Download"
+        on_release: root.download_image(root.download_file)
+
+<DownloadProgress>:
+  title: 'Downloading {0}'.format(root.image)
+  id: dlprogress
+  BoxLayout:
+    size: root.size
+    pos: root.pos
+    orientation: 'vertical'
+    BoxLayout:
+      Label:
+        id: download_progress_counter
+      ProgressBar:
+        id: download_progress_bar
+        max: 1
+        value: 0
+    BoxLayout:
+      size_hint_y: None
+      height: 30
+      Button:
+        text: "Cancel"
+        on_release: root.cancel()
+      Button:
+        text: "Suspend"
+        on_release: root.suspend()
 
 <DownloadButton>:
   text: root.image

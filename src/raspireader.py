@@ -14,7 +14,8 @@ from kivy.uix.scrollview import ScrollView
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.core.window import Window
 from kivy.adapters.listadapter import ListAdapter
-import os, threading
+from kivy.network.urlrequest import UrlRequest
+import os, threading, zipfile
 from threading import Thread
 from download_img import *
 
@@ -26,6 +27,7 @@ class DownloadButton(Button):
     image = StringProperty()
 
 class DownloadISODialog(Popup):
+    stop = threading.Event()
     def getdownloadlist(self):
         download_list = data.getDownloadImg()
         if not download_list:
@@ -107,6 +109,50 @@ class RootWidget(FloatLayout):
 class PageManager(ScreenManager):
     pass
 
+class DownloadProgress(Popup):
+    image = StringProperty()
+    stop = threading.Event()
+    zip_file = ""
+
+    def download_content(self, f):
+        file_tuple = download_iso(f)
+        self.zip_file = file_tuple[1]
+        req = UrlRequest(file_tuple[0], on_progress=self.update_progress,
+                chunk_size=1024, on_success=self.finish,
+                file_path=file_tuple[1])
+
+
+    def update_progress(self, request, current_size, total_size):
+        progress = current_size / total_size
+        self.ids['download_progress_counter'].text = 'Downloading {0:.2f}%'.format(progress*100)
+        self.ids['download_progress_bar'].value = progress
+
+    def finish(self, request, result):
+        threading.Thread(target=self.unzip_content).start()
+
+    def unzip_content(self):
+        #TODO update to show that it is unzipping
+        print("Unzipping file")
+        #unzip file
+        fh = open(self.zip_file, 'rb')
+        z = zipfile.ZipFile(fh)
+        ZIP_EXTRACT_FOLDER = self.zip_file + '_extracted'
+        if not os.path.exists(ZIP_EXTRACT_FOLDER):
+            os.makedirs(ZIP_EXTRACT_FOLDER)
+        z.extractall(ZIP_EXTRACT_FOLDER)
+        fh.close()
+        os.remove(self.zip_file)
+        self.dismiss()
+
+    def suspend(self):
+        #leave partial file
+        self.dismiss()
+
+    def cancel(self):
+        #delete partial file
+        os.remove(self.zip_file)
+        self.dismiss()
+
 class StartPage(Screen):
     iso_file = StringProperty('No Image Chosen')
     download_file = StringProperty('Pick Image')
@@ -124,6 +170,11 @@ class StartPage(Screen):
         self.download_dialog.bind(dl_image=self.setter('download_file'))
         self.download_dialog.getdownloadlist()
 
+    def download_image(self, f):
+        self.download_progress = DownloadProgress()
+        self.download_progress.image = f
+        self.download_progress.open()
+        self.download_progress.download_content(f)
 
 
 class OptionsPage(Screen):
@@ -136,6 +187,9 @@ class BackupPage(Screen):
     pass
 
 class RasPiReaderApp(App):
+    def on_stop(self):
+        self.root.stop.set()
+
     def build(self):
         img_dir_exists()
         root = RootWidget()

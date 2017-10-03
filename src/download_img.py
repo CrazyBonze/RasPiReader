@@ -64,10 +64,13 @@ def download_iso(result):
         os.makedirs(directory)
 
     # Download the .zip and save it as the image name (version number/date).
-    urllib.request.urlretrieve(base_url + result + result_download, directory_name + result_download)
+    file_url = base_url + result + result_download
+    file_path = directory_name + result_download
+    return file_url, file_path
+    #urllib.request.urlretrieve(base_url + result + result_download, directory_name + result_download)
 
     # Extract the .zip file and save the .img file.
-    unzip(directory, result_download)
+    #unzip(directory, result_download)
     #zip_ref = zipfile.ZipFile(directory_name + result_download, 'r')
     #zip_ref.extractall(directory_name)
     #zip_ref.close()
@@ -87,4 +90,4 @@ if __name__ == '__main__':
     print(directory_list())
     print(img[1])
     print(fake_image_list())
-    #download_iso(img[1])
+    print(download_iso(img[1]))
