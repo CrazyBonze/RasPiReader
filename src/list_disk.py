@@ -1,4 +1,4 @@
-import subprocess, os, platform, itertools
+import subprocess, os, platform, itertools, string
 
 def list_disks():
     system_name = platform.platform()
@@ -12,6 +12,7 @@ def list_disks():
         return output.decode('utf-8').split()
 
     elif system_name.startswith("Linux"):
+        '''
         disk_command = ["lsblk", "-n", "-o", "KNAME,RM"]
         p = subprocess.Popen(disk_command, stdout=subprocess.PIPE)
         output, err = p.communicate()
@@ -20,10 +21,12 @@ def list_disks():
         d = {k:v for k,v in d.items() if int(v[0]) }
         #TODO remove values with numbers
         return list(d.keys()) or ["None"]
-    return ["None"]
-
-
-#lsblk -o KNAME,RM
+        '''
+        p1 = subprocess.Popen(['./listusb.sh'], stdout=subprocess.PIPE, shell=True)
+        output, err = p1.communicate()
+        p1.stdout.close()
+        return output.decode('utf8').split('\n')[:-1]
+    return []
 
 if __name__ == '__main__':
     print(list_disks())
