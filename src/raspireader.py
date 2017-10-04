@@ -15,7 +15,7 @@ from kivy.properties import ObjectProperty, StringProperty
 from kivy.core.window import Window
 from kivy.adapters.listadapter import ListAdapter
 from kivy.network.urlrequest import UrlRequest
-import os, threading, zipfile
+import os, threading, zipfile, re
 from threading import Thread
 from download_img import *
 
@@ -45,7 +45,7 @@ class DownloadISODialog(Popup):
                 self.layout.add_widget(btn)
 
     def worker(self):
-        images = fake_image_list()
+        images = image_list()
         self.ids.scroll_view.clear_widgets()
         data.setDownloadImg(images)
         self.layout = GridLayout(cols=1, size_hint_y=None)
@@ -118,7 +118,7 @@ class DownloadProgress(Popup):
         file_tuple = download_iso(f)
         self.zip_file = file_tuple[1]
         req = UrlRequest(file_tuple[0], on_progress=self.update_progress,
-                chunk_size=1024, on_success=self.finish,
+                chunk_size=32768, on_success=self.finish,
                 file_path=file_tuple[1])
 
 
@@ -129,6 +129,8 @@ class DownloadProgress(Popup):
 
     def finish(self, request, result):
         threading.Thread(target=self.unzip_content).start()
+        self.ids['progress_area'].clear_widgets()
+        self.ids['progress_area'].add_widget(Label(text='Unzipping...'))
 
     def unzip_content(self):
         #TODO update to show that it is unzipping
@@ -136,7 +138,7 @@ class DownloadProgress(Popup):
         #unzip file
         fh = open(self.zip_file, 'rb')
         z = zipfile.ZipFile(fh)
-        ZIP_EXTRACT_FOLDER = self.zip_file + '_extracted'
+        ZIP_EXTRACT_FOLDER = re.sub(r'\.[zZ][iI][pP]', '', self.zip_file)
         if not os.path.exists(ZIP_EXTRACT_FOLDER):
             os.makedirs(ZIP_EXTRACT_FOLDER)
         z.extractall(ZIP_EXTRACT_FOLDER)
