@@ -46,13 +46,6 @@ def image_list():
 
 # result is a member of result_list from image_list().
 def download_iso(result):
-
-    # Parse the list of images for most recent image.
-    # url_stream = urllib.request.urlopen(base_url)
-    # url = url_stream.read().decode('utf-8')
-    # result_list = re.findall('raspbian-20[0-9][0-9]-[0-9][0-9]-[0-9][0-9]\/',url)
-    # result = result_list[-1]
-
     # Parse the folder for the name of the image name (version number/date).
     url_download = urllib.request.urlopen(base_url + result).read().decode('utf-8')
     download_name = re.findall('20[0-9][0-9]-[0-9][0-9]-[0-9][0-9][a-z\-]+\.zip',url_download)
@@ -63,31 +56,13 @@ def download_iso(result):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    # Download the .zip and save it as the image name (version number/date).
     file_url = base_url + result + result_download
     file_path = directory_name + result_download
     return file_url, file_path
-    #urllib.request.urlretrieve(base_url + result + result_download, directory_name + result_download)
-
-    # Extract the .zip file and save the .img file.
-    #unzip(directory, result_download)
-    #zip_ref = zipfile.ZipFile(directory_name + result_download, 'r')
-    #zip_ref.extractall(directory_name)
-    #zip_ref.close()
-
-    return;
-
-def unzip(path, f):
-    zip_ref = zipfile.ZipFile(path + f, 'r')
-    zip_ref.extractall(path)
-    zip_ref.close()
-
-
 
 if __name__ == '__main__':
     img = image_list()
     print(img)
-    print(directory_list())
     print(img[1])
-    print(fake_image_list())
+    #print(fake_image_list())
     print(download_iso(img[1]))
