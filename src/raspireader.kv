@@ -167,33 +167,39 @@
     StackLayout:
       Label:
         size_hint: 0.2, None
-        height: '32dp'
-        text: "Image"
+        #height: '32dp'
+        height: 30
+        text: "Local Image"
       TextInput:
         size_hint: .6, None
-        height: '32dp'
+        #height: '32dp'
+        height: 30
         multiline: False
         disabled: True
         id: iso_label
         text: root.iso_file
       Button:
         size_hint: .2, None
-        height: '32dp'
+        #height: '32dp'
+        height: 30
         text: "Load"
         on_release: root.file_pick()
       Label:
         size_hint: 0.2, None
-        height: '32dp'
-        text: "Download"
+        #height: '32dp'
+        height: 30
+        text: "Download Image"
       Button:
         size_hint: .6, None
-        height: '32dp'
+        #height: '32dp'
+        height: 30
         id: download_image
         text: root.download_file
         on_release: root.download_pick()
       Button:
         size_hint: .2, None
-        height: '32dp'
+        #height: '32dp'
+        height: 30
         text: "Download"
         on_release: root.download_image(root.download_file)
 
@@ -205,13 +211,25 @@
 <DropDownButton>:
   text: root.sd_card
   size_hint_y: None
-  height: 50
+  height: 30
   on_press: root.update()
 
 <CommitPage>:
   name: "commitpage"
-  DropDownButton:
-    text: "SD card"
+  GridLayout:
+    rows: 2
+    Label:
+      size_hint: 1, 0.1
+      text: "Commit Page"
+    StackLayout:
+      Label:
+        size_hint: 0.2, None
+        #height: '32dp'
+        height: 30
+        text: "Pick SD card"
+      DropDownButton:
+        size_hint: 0.8, None
+        text: "SD card"
 
 <BackupPage>:
   name: "backuppage"

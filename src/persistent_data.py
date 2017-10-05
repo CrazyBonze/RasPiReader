@@ -49,4 +49,5 @@ class PersistentData(Singleton):
 
     def print_to_screen(self):
         print('ISOFile:\t{0}'.format(PersistentData.ISOFile))
+        print('DiskSD:\t{0}'.format(PersistentData.DiskSD))
         print('Settings:\t{0}'.format(PersistentData.Settings))
