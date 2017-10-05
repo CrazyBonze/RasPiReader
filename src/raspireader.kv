@@ -61,46 +61,6 @@
 <PageManager>:
   size_hint: 1, .8
 
-<StartPage>:
-  name: "startpage"
-  GridLayout:
-    rows: 2
-    Label:
-      size_hint: 1, 0.1
-      text: "Start Page"
-    StackLayout:
-      Label:
-        size_hint: 0.2, None
-        height: '32dp'
-        text: "Image"
-      TextInput:
-        size_hint: .6, None
-        height: '32dp'
-        multiline: False
-        disabled: True
-        id: iso_label
-        text: root.iso_file
-      Button:
-        size_hint: .2, None
-        height: '32dp'
-        text: "Load"
-        on_release: root.file_pick()
-      Label:
-        size_hint: 0.2, None
-        height: '32dp'
-        text: "Download"
-      Button:
-        size_hint: .6, None
-        height: '32dp'
-        id: download_image
-        text: root.download_file
-        on_release: root.download_pick()
-      Button:
-        size_hint: .2, None
-        height: '32dp'
-        text: "Download"
-        on_release: root.download_image(root.download_file)
-
 <DownloadProgress>:
   title: 'Downloading {0}'.format(root.image)
   id: dlprogress
@@ -197,15 +157,61 @@
         text: "Save"
         on_release: root.save(filechooser.path. text_input.text)
 
+<StartPage>:
+  name: "startpage"
+  GridLayout:
+    rows: 2
+    Label:
+      size_hint: 1, 0.1
+      text: "Start Page"
+    StackLayout:
+      Label:
+        size_hint: 0.2, None
+        height: '32dp'
+        text: "Image"
+      TextInput:
+        size_hint: .6, None
+        height: '32dp'
+        multiline: False
+        disabled: True
+        id: iso_label
+        text: root.iso_file
+      Button:
+        size_hint: .2, None
+        height: '32dp'
+        text: "Load"
+        on_release: root.file_pick()
+      Label:
+        size_hint: 0.2, None
+        height: '32dp'
+        text: "Download"
+      Button:
+        size_hint: .6, None
+        height: '32dp'
+        id: download_image
+        text: root.download_file
+        on_release: root.download_pick()
+      Button:
+        size_hint: .2, None
+        height: '32dp'
+        text: "Download"
+        on_release: root.download_image(root.download_file)
+
 <OptionsPage>:
   name: "optionspage"
   Label:
     text: "Options Page"
 
+<DropDownButton>:
+  text: root.sd_card
+  size_hint_y: None
+  height: 50
+  on_press: root.update()
+
 <CommitPage>:
   name: "commitpage"
-  Label:
-    text: "Commit Page"
+  DropDownButton:
+    text: "SD card"
 
 <BackupPage>:
   name: "backuppage"

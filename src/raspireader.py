@@ -11,6 +11,7 @@ from kivy.uix.selectableview import SelectableView
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
+from kivy.uix.dropdown import DropDown
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.core.window import Window
 from kivy.adapters.listadapter import ListAdapter
@@ -18,6 +19,7 @@ from kivy.network.urlrequest import UrlRequest
 import os, threading, zipfile, re
 from threading import Thread
 from download_img import *
+from list_disk import *
 
 # Persistent Data
 from persistent_data import PersistentData
@@ -124,7 +126,8 @@ class DownloadProgress(Popup):
 
     def update_progress(self, request, current_size, total_size):
         progress = current_size / total_size
-        self.ids['download_progress_counter'].text = 'Downloading {0:.2f}%'.format(progress*100)
+        self.ids['download_progress_counter'].text = \
+            'Downloading {0:.2f}%'.format(progress*100)
         self.ids['download_progress_bar'].value = progress
 
     def finish(self, request, result):
@@ -182,8 +185,34 @@ class StartPage(Screen):
 class OptionsPage(Screen):
     pass
 
+class DropDownButton(Button):
+    sd_card = StringProperty("SD card")
+    def __init__(self, **kwargs):
+        super(DropDownButton, self).__init__(**kwargs)
+        self.drop_list = None
+        self.drop_list = DropDown()
+        self.types = []
+
+    def update(self):
+        self.types = list_disks()
+        if not self.types:
+            self.drop_list.clear_widgets()
+            setattr(self, 'text', "SD card")
+            return
+        self.drop_list.clear_widgets()
+        for i in self.types:
+            btn = Button(text=i, size_hint_y=None, height=50)
+            btn.bind(on_release=lambda btn: self.drop_list.select(btn.text))
+            self.drop_list.add_widget(btn)
+        self.bind(on_release=self.drop_list.open)
+        self.drop_list.bind(on_select=lambda instance, x: setattr(self, 'text', x))
+
+
 class CommitPage(Screen):
-    pass
+    sd_dropdown = DropDown()
+
+    def get_list(self):
+        print(self.sd_options)
 
 class BackupPage(Screen):
     pass
