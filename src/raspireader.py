@@ -206,7 +206,6 @@ class DropDownButton(Button):
             self.drop_list.add_widget(btn)
         self.bind(on_release=self.drop_list.open)
         self.drop_list.bind(on_select=lambda instance, x: self.pick_sd(x))
-        #self.drop_list.bind(on_select=lambda instance, x: setattr(self, 'text', x))
 
     def pick_sd(self, x):
         setattr(self,'text', x)
