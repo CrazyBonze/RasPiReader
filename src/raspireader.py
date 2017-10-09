@@ -218,7 +218,10 @@ class CommitPage(Screen):
         self.commit_disable = False
 
     def commit(self):
-        print("Commiting to SD card")
+        if data.validate():
+            print("Commiting to SD card")
+        else:
+            print("Failed to validate")
 
 class BackupPage(Screen):
     pass
