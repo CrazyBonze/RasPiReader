@@ -12,7 +12,7 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.dropdown import DropDown
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
 from kivy.core.window import Window
 from kivy.adapters.listadapter import ListAdapter
 from kivy.network.urlrequest import UrlRequest
@@ -60,9 +60,12 @@ class DownloadISODialog(Popup):
 
     def setDLImage(self, img):
         self.dl_image = img
+        self.dl_disable = False
         self.dismiss()
 
     def cancel(self):
+        self.dl_image = "Pick Image"
+        self.dl_disable = True
         self.dismiss()
 
 class LoadISODialog(Popup):
@@ -161,6 +164,7 @@ class DownloadProgress(Popup):
 class StartPage(Screen):
     iso_file = StringProperty('No Image Chosen')
     download_file = StringProperty('Pick Image')
+    download_disable = BooleanProperty(True)
     def get_iso_file(self):
         return data.getISOFile()
 
@@ -173,6 +177,7 @@ class StartPage(Screen):
         self.download_dialog = DownloadISODialog()
         self.download_dialog.open()
         self.download_dialog.bind(dl_image=self.setter('download_file'))
+        self.download_dialog.bind(dl_disable=self.setter('download_disable'))
         self.download_dialog.getdownloadlist()
 
     def download_image(self, f):
@@ -185,39 +190,35 @@ class StartPage(Screen):
 class OptionsPage(Screen):
     pass
 
-class DropDownButton(Button):
-    sd_card = StringProperty("SD card")
+class CommitPage(Screen):
+    commit_disable = BooleanProperty(True)
+    sd = StringProperty("SD card")
     def __init__(self, **kwargs):
-        super(DropDownButton, self).__init__(**kwargs)
-        self.drop_list = None
-        self.drop_list = DropDown()
-        self.types = []
+        super(CommitPage, self).__init__(**kwargs)
+        self.dd = DropDown()
 
-    def update(self):
-        self.types = list_disks()
-        if not self.types:
-            self.drop_list.clear_widgets()
-            setattr(self, 'text', "SD card")
+    def sd_dd(self):
+        types = list_disks()
+        if not types:
+            self.dd.clear_widgets()
+            self.sd = "SD card"
+            self.commit_disable = True
             return
-        self.drop_list.clear_widgets()
-        for i in self.types:
+        self.dd.clear_widgets()
+        for i in types:
             btn = Button(text=i, size_hint_y=None, height=30)
-            btn.bind(on_release=lambda btn: self.drop_list.select(btn.text))
-            self.drop_list.add_widget(btn)
-        self.bind(on_release=self.drop_list.open)
-        self.drop_list.bind(on_select=lambda instance, x: self.pick_sd(x))
+            btn.bind(on_release=lambda btn: self.dd.select(btn.text))
+            self.dd.add_widget(btn)
+        self.ids['dd_btn'].bind(on_release=self.dd.open)
+        self.dd.bind(on_select=lambda instance, x: self.pick_sd(x))
 
     def pick_sd(self, x):
-        setattr(self,'text', x)
+        self.sd = x
         data.setDiskSD(x)
-        print(x)
+        self.commit_disable = False
 
-
-class CommitPage(Screen):
-    sd_dropdown = DropDown()
-
-    def get_list(self):
-        print(self.sd_options)
+    def commit(self):
+        print("Commiting to SD card")
 
 class BackupPage(Screen):
     pass

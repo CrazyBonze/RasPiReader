@@ -101,9 +101,9 @@
 
 <DownloadISODialog>:
   on_open: app.root.DLISODialog=self
-  id: DLISODialog
   title: "Pick image"
   dl_image: None
+  dl_disable: True
   BoxLayout:
     size: root.size
     pos: root.pos
@@ -198,6 +198,7 @@
         text: root.download_file
         on_release: root.download_pick()
       Button:
+        disabled: root.download_disable
         size_hint: .2, None
         height: 30
         text: "Download"
@@ -209,6 +210,7 @@
     text: "Options Page"
 
 <DropDownButton>:
+  sd_not_chosen: True
   text: root.sd_card
   size_hint_y: None
   height: 30
@@ -216,6 +218,7 @@
 
 <CommitPage>:
   name: "commitpage"
+  id: commitpage
   GridLayout:
     rows: 2
     Label:
@@ -224,12 +227,21 @@
     StackLayout:
       Label:
         size_hint: 0.2, None
-        #height: '32dp'
         height: 30
         text: "Pick SD card"
-      DropDownButton:
-        size_hint: 0.8, None
-        text: "SD card"
+      Button:
+        id: dd_btn
+        text: root.sd
+        size_hint: 0.2, None
+        height: 30
+        on_press: root.sd_dd()
+      Button:
+        size_hint: 0.6, None
+        id: sd_commit
+        disabled: root.commit_disable
+        text: "Commit to SD card"
+        height: 30
+        on_release: root.commit()
 
 <BackupPage>:
   name: "backuppage"
