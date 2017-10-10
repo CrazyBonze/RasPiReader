@@ -1,10 +1,20 @@
-from __future__ import print_function
-import subprocess, os, threading, time, sys, inspect
+import subprocess
+import os
+import time
 
 
 pkexec = '/usr/bin/pkexec '
 etchr = os.getcwd() + '/Etcher/etcher -d {0} {1} {2} {3} {4} '
-class Flasher(threading.Thread):
+
+
+''' Exit codes
+0 - Success
+1 - General Error
+2 - Validation Error
+3 - Cancelled
+'''
+
+class Flasher():
     def __init__(self, drive, img, unmount = False, check = True, confirm = True):
         self._drive = drive
         self._img = img
@@ -12,13 +22,21 @@ class Flasher(threading.Thread):
         self._check = '-c' if check else ''
         self._confirm = '-y' if confirm else ''
         self._proc = None
-        self.stdout = None
-        self.stderr = None
-        threading.Thread.__init__(self)
+        self._curstr = ''
 
-    def run(self):
-        print('Starting Etcher process with image \n{0} \\non \
-                disk {1}'.format(self._img.split('/')[-1], self._drive))
+    def read(self):
+        self._proc.poll()
+        if not self._proc.returncode is None:
+            if self._proc.returncode:
+                print(self._proc.stderr.readline().decode("utf-8"))
+            return self._proc.returncode
+        s = self._proc.stdout.readline().decode("utf-8").rstrip().lstrip()
+        if(len(s) > 4):
+            self._curstr = s[4::]
+        return self._curstr
+
+    def flash(self):
+        print('Starting Etcher process with image \n{0} \non disk {1}'.format(self._img.split('/')[-1], self._drive))
         cmd = pkexec + etchr.format(self._drive,
                 self._unmount,
                 self._check,
@@ -29,60 +47,13 @@ class Flasher(threading.Thread):
                 shell = False,
                 stdout = subprocess.PIPE,
                 stderr = subprocess.PIPE)
-        print("Setting up communication")
-        #self.stdout, self.stderr = self._proc.communicate()
-        print("Finished starting threaded subprocess")
-
-    def read(self):
-        sout = self._proc.stdout.read()
-        serr = self._proc.stderr.read()
-        if sout and serr:
-            #sys.stdout.write(s)
-            print(sout)
-            print(serr)
-        #if self._proc.returncode is None:
-            #code = self._proc.poll()
-        #else:
-            #break
-        #return code
-
-def flash(drive, img, unmount = False, check = True, confirm = True):
-        _unmount = '-u' if unmount else ''
-        _check = '-c' if check else ''
-        _confirm = '-y' if confirm else ''
-        print('Starting Etcher process with image \n{0} \non \
-                disk {1}'.format(img.split('/')[-1], drive))
-        cmd = pkexec + etchr.format(drive,
-                _unmount,
-                _check,
-                _confirm,
-                img)
-        print(cmd)
-        proc = subprocess.Popen(cmd.split(),
-                shell = True,
-                stdout = subprocess.PIPE,
-                stderr = subprocess.PIPE)
-        return proc
-
-
-
-
+        self._proc.poll()
 
 if __name__ == '__main__':
-    img = '/home/michael/RasPiReader/src/images/2017-09-07-raspbian-stretch/2017-09-07-raspbian-stretch.img'
-    drive = '/dev/sdc'
-    print("Creating Flasher")
-    f = Flasher(drive, img)
-    print("Starting Flasher")
-    f.start()
-    print("Joining Flasher")
-    f.join()
-    #p = flash(drive, img)
+    img = '/home/micheal/RasPiReader/src/images/2017-09-07-raspbian-stretch/256.img'
+    drive = '/dev/sdd'
+    p = Flasher(drive, img)
+    p.flash()
     while True:
-        print("output")
-        #print(p.stdout.read())
-        #print(p.stderr.read())
-        #print('stdout:{0}'.format(f.stdout.read(1)))
-        #print('stderr:{0}'.format(f.stderr))
-        f.read()
-        time.sleep(2)
+        #time.sleep(3)
+        print(p.read())
