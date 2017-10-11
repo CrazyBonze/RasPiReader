@@ -253,7 +253,8 @@ class CommitPage(Screen):
             self.flash_progress = FlashProgress()
             self.flash_progress.image = data.getISOFile()
             self.flash_progress.disk = data.getDiskSD()[0]
-            self.flash_progress.flash_card('/dev/sdd', data.getISOFile())
+            d = '/dev/{0}'.format(data.getDiskSD()[0])
+            self.flash_progress.flash_card(d, data.getISOFile())
             self.flash_progress.open()
         else:
             print("Failed to validate")
