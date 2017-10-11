@@ -1,6 +1,7 @@
 # Kivy files
 from kivy.app import App
 from kivy.lang import Builder
+from kivy.clock import Clock
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.anchorlayout import AnchorLayout
@@ -202,10 +203,16 @@ class FlashProgress(Popup):
 
     def flash_card(self, disk, image):
         self.f = Flasher(disk, image)
+        self.f.flash()
+        Clock.schedule_interval(self.update_progress, 1/25)
 
-    def update_progress(self, progress_string):
-        pass
-
+    def update_progress(self, dt):
+        update = self.f.read()
+        if isinstance(update, str):
+            self.progress_counter = self.f.read()
+        else:
+            if update == 0:
+                cancel()
 
     def cancel(self):
         self.dismiss()
@@ -245,8 +252,8 @@ class CommitPage(Screen):
             self.flash_progress = FlashProgress()
             self.flash_progress.image = data.getISOFile()
             self.flash_progress.disk = data.getDiskSD()[0]
-            self.flash_progress.open()
             self.flash_progress.flash_card('/dev/sdd', data.getISOFile())
+            self.flash_progress.open()
         else:
             print("Failed to validate")
 

@@ -33,6 +33,7 @@ class Flasher():
         s = self._proc.stdout.readline().decode("utf-8").rstrip().lstrip()
         if(len(s) > 4):
             self._curstr = s[4::]
+        print(self._curstr)
         return self._curstr
 
     def flash(self):
