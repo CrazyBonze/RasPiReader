@@ -20,6 +20,7 @@ import os, threading, zipfile, re
 from threading import Thread
 from download_img import *
 from list_disk import *
+from flash import *
 
 # Persistent Data
 from persistent_data import PersistentData
@@ -190,9 +191,30 @@ class StartPage(Screen):
 class OptionsPage(Screen):
     pass
 
+class FlashProgress(Popup):
+    image = StringProperty()
+    disk = StringProperty()
+    progress_counter = StringProperty("0% eta 0s")
+
+    def __init__(self, **kwargs):
+        super(FlashProgress, self).__init__(**kwargs)
+        self.f = None
+
+    def flash_card(self, disk, image):
+        self.f = Flasher(disk, image)
+
+    def update_progress(self, progress_string):
+        pass
+
+
+    def cancel(self):
+        self.dismiss()
+
 class CommitPage(Screen):
     commit_disable = BooleanProperty(True)
     sd = StringProperty("SD card")
+    check = BooleanProperty()
+    unmount = BooleanProperty()
     def __init__(self, **kwargs):
         super(CommitPage, self).__init__(**kwargs)
         self.dd = DropDown()
@@ -220,8 +242,17 @@ class CommitPage(Screen):
     def commit(self):
         if data.validate():
             print("Commiting to SD card")
+            self.flash_progress = FlashProgress()
+            self.flash_progress.image = data.getISOFile()
+            self.flash_progress.disk = data.getDiskSD()[0]
+            self.flash_progress.open()
+            self.flash_progress.flash_card('/dev/sdd', data.getISOFile())
         else:
             print("Failed to validate")
+
+    def show(self):
+        print(self.ids['validate'].active)
+        print(self.ids['unmount'].active)
 
 class BackupPage(Screen):
     pass

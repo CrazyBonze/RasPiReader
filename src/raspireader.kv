@@ -93,6 +93,29 @@
         text: "Suspend"
         on_release: root.suspend()
 
+<FlashProgress>:
+  title: 'Flashing {0} to {1}'.format(root.image, root.disk)
+  id: flashprogress
+  BoxLayout:
+    size: root.size
+    pos: root.pos
+    orientation: 'vertical'
+    BoxLayout:
+      id: progress_area
+      Label:
+        id: flash_progress_counter
+        text: root.progress_counter
+      ProgressBar:
+        id: flash_progress_bar
+        max: 1
+        value: 0
+    BoxLayout:
+      size_hint_y: None
+      height: 30
+      Button:
+        text: "Cancel"
+        on_release: root.cancel()
+
 <DownloadButton>:
   text: root.image
   size_hint_y: None
@@ -225,23 +248,48 @@
       size_hint: 1, 0.1
       text: "Commit Page"
     StackLayout:
-      Label:
-        size_hint: 0.2, None
-        height: 30
-        text: "Pick SD card"
-      Button:
-        id: dd_btn
-        text: root.sd
-        size_hint: 0.2, None
-        height: 30
-        on_press: root.sd_dd()
+      GridLayout:
+        size_hint: 1, 0.3
+        cols: 3
+        Label:
+          size_hint: 0.2, None
+          height: 30
+          text: "Pick SD card"
+        Label:
+          text: "Validate write"
+          size_hint: 0.2, None
+          height: 30
+        Label:
+          text: "Unmount on success"
+          size_hint: 0.2, None
+          height: 30
+        Button:
+          id: dd_btn
+          text: root.sd
+          size_hint: 0.2, None
+          height: 30
+          on_press: root.sd_dd()
+        CheckBox:
+          id: validate
+          size_hint: 0.2, None
+          height: 30
+        CheckBox:
+          id: unmount
+          size_hint: 0.2, None
+          height: 30
       Button:
         size_hint: 0.6, None
         id: sd_commit
         disabled: root.commit_disable
         text: "Commit to SD card"
-        height: 30
+        height: 60
         on_release: root.commit()
+      Button:
+        text: "show stuff"
+        size_hint: 0.2, None
+        height: 30
+        on_release: root.show()
+
 
 <BackupPage>:
   name: "backuppage"
