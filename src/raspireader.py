@@ -210,8 +210,18 @@ class FlashProgress(Popup):
     def update_progress(self, dt):
         update = self.f.read()
         if update in Exit_code:
-            self.cancel()
+            self.ids['progress_area'].clear_widgets()
+            status = Label(text=update)
+            self.ids['progress_area'].add_widget(status)
+            self.event.cancel()
+            self.ids['command_button'].clear_widgets()
+            finish_btn = Button(text= "Dismiss")
+            finish_btn.bind(on_release=lambda x: self.finish())
+            self.ids['command_button'].add_widget(finish_btn)
         self.progress_counter = self.f.read()
+
+    def finish(self):
+        self.dismiss()
 
     def cancel(self):
         #self.f.kill()
