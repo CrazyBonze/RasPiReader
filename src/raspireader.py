@@ -200,21 +200,22 @@ class FlashProgress(Popup):
     def __init__(self, **kwargs):
         super(FlashProgress, self).__init__(**kwargs)
         self.f = None
+        self.event = None
 
     def flash_card(self, disk, image):
         self.f = Flasher(disk, image)
         self.f.flash()
-        Clock.schedule_interval(self.update_progress, 1/25)
+        self.event = Clock.schedule_interval(self.update_progress, 1/25)
 
     def update_progress(self, dt):
         update = self.f.read()
-        if isinstance(update, str):
-            self.progress_counter = self.f.read()
-        else:
-            if update == 0:
-                cancel()
+        if update in Exit_code:
+            self.cancel()
+        self.progress_counter = self.f.read()
 
     def cancel(self):
+        #self.f.kill()
+        self.event.cancel()
         self.dismiss()
 
 class CommitPage(Screen):

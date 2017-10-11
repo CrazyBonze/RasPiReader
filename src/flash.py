@@ -1,18 +1,19 @@
 import subprocess
 import os
 import time
+import signal
 
 
 pkexec = '/usr/bin/pkexec '
 etchr = os.getcwd() + '/Etcher/etcher -d {0} {1} {2} {3} {4} '
 
 
-''' Exit codes
-0 - Success
-1 - General Error
-2 - Validation Error
-3 - Cancelled
-'''
+Exit_code = [
+        '0 - Success',
+        '1 - General Error',
+        '2 - Validation Error',
+        '3 - Cancelled',
+        '126 - Invalid credentials']
 
 class Flasher():
     def __init__(self, drive, img, unmount = False, check = True, confirm = True):
@@ -29,11 +30,13 @@ class Flasher():
         if not self._proc.returncode is None:
             if self._proc.returncode:
                 print(self._proc.stderr.readline().decode("utf-8"))
-            return self._proc.returncode
+                print(self._proc.returncode)
+            if self._proc.returncode == 126:
+                return Exit_code[4]
+            return Exit_code[self._proc.returncode]
         s = self._proc.stdout.readline().decode("utf-8").rstrip().lstrip()
         if(len(s) > 4):
             self._curstr = s[4::]
-        print(self._curstr)
         return self._curstr
 
     def flash(self):
@@ -49,6 +52,12 @@ class Flasher():
                 stdout = subprocess.PIPE,
                 stderr = subprocess.PIPE)
         self._proc.poll()
+
+    def kill(self):
+        #TODO kills the app and not just the subprocess
+        if self._proc.pid:
+            os.killpg(os.getpgid(self._proc.pid), signal.SIGTERM)
+
 
 if __name__ == '__main__':
     img = '/home/micheal/RasPiReader/src/images/2017-09-07-raspbian-stretch/256.img'
