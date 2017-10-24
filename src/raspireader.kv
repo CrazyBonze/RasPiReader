@@ -272,24 +272,21 @@
           on_press: root.sd_dd()
         CheckBox:
           id: validate
+          active: True
           size_hint: 0.2, None
           height: 30
         CheckBox:
           id: unmount
+          active: True
           size_hint: 0.2, None
           height: 30
       Button:
-        size_hint: 0.6, None
+        size_hint: 1, None
         id: sd_commit
         disabled: root.commit_disable
         text: "Commit to SD card"
         height: 60
         on_release: root.commit()
-      Button:
-        text: "show stuff"
-        size_hint: 0.2, None
-        height: 30
-        on_release: root.show()
 
 
 <BackupPage>:

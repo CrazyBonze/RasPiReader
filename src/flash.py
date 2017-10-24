@@ -5,7 +5,7 @@ import signal
 
 
 pkexec = '/usr/bin/pkexec '
-etchr = os.getcwd() + '/Etcher/etcher -d {0} {1} {2} {3} {4} '
+etchr = os.getcwd() + '/Etcher/etcher -d {0} {1} {2} {3} {4}'
 
 
 Exit_code = [
@@ -19,8 +19,8 @@ class Flasher():
     def __init__(self, drive, img, unmount = False, check = True, confirm = True):
         self._drive = drive
         self._img = img
-        self._unmount = '-u' if unmount else ''
-        self._check = '-c' if check else ''
+        self._unmount = '-u {0}'.format('true' if unmount else 'false')
+        self._check = '-c {0}'.format('true' if check else 'false')
         self._confirm = '-y' if confirm else ''
         self._proc = None
         self._curstr = ''
@@ -40,7 +40,7 @@ class Flasher():
         return self._curstr
 
     def flash(self):
-        print('Starting Etcher process with image \n{0} \non disk {1}'.format(self._img.split('/')[-1], self._drive))
+        print('Starting Etcher process with image {0} on disk {1}'.format(self._img.split('/')[-1], self._drive))
         cmd = pkexec + etchr.format(self._drive,
                 self._unmount,
                 self._check,
@@ -54,9 +54,8 @@ class Flasher():
         self._proc.poll()
 
     def kill(self):
-        #TODO kills the app and not just the subprocess
-        if self._proc.pid:
-            os.killpg(os.getpgid(self._proc.pid), signal.SIGTERM)
+        #TODO cant kill because it is sudo
+        self._proc.kill()
 
 
 if __name__ == '__main__':

@@ -196,14 +196,18 @@ class FlashProgress(Popup):
     image = StringProperty()
     disk = StringProperty()
     progress_counter = StringProperty("0% eta 0s")
+    check = BooleanProperty()
+    unmount = BooleanProperty()
 
     def __init__(self, **kwargs):
         super(FlashProgress, self).__init__(**kwargs)
         self.f = None
         self.event = None
+        self.image = data.getISOFile()
+        self.disk = '/dev/{0}'.format(data.getDiskSD()[0])
 
-    def flash_card(self, disk, image):
-        self.f = Flasher(disk, image)
+    def flash_card(self):
+        self.f = Flasher(self.disk, self.image, self.unmount, self.validate)
         self.f.flash()
         self.event = Clock.schedule_interval(self.update_progress, 1/25)
 
@@ -218,7 +222,7 @@ class FlashProgress(Popup):
             finish_btn = Button(text= "Dismiss")
             finish_btn.bind(on_release=lambda x: self.finish())
             self.ids['command_button'].add_widget(finish_btn)
-        self.progress_counter = self.f.read()
+        self.progress_counter = update
 
     def finish(self):
         self.dismiss()
@@ -231,8 +235,6 @@ class FlashProgress(Popup):
 class CommitPage(Screen):
     commit_disable = BooleanProperty(True)
     sd = StringProperty("SD card")
-    check = BooleanProperty()
-    unmount = BooleanProperty()
     def __init__(self, **kwargs):
         super(CommitPage, self).__init__(**kwargs)
         self.dd = DropDown()
@@ -261,17 +263,12 @@ class CommitPage(Screen):
         if data.validate():
             print("Commiting to SD card")
             self.flash_progress = FlashProgress()
-            self.flash_progress.image = data.getISOFile()
-            self.flash_progress.disk = data.getDiskSD()[0]
-            d = '/dev/{0}'.format(data.getDiskSD()[0])
-            self.flash_progress.flash_card(d, data.getISOFile())
+            self.flash_progress.validate = self.ids['validate'].active
+            self.flash_progress.unmount = self.ids['unmount'].active
+            self.flash_progress.flash_card()
             self.flash_progress.open()
         else:
             print("Failed to validate")
-
-    def show(self):
-        print(self.ids['validate'].active)
-        print(self.ids['unmount'].active)
 
 class BackupPage(Screen):
     pass
