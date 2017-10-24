@@ -4,7 +4,6 @@ import time
 import signal
 
 
-pkexec = '/usr/bin/pkexec '
 etchr = os.getcwd() + '/Etcher/etcher -d {0} {1} {2} {3} {4}'
 
 
@@ -40,8 +39,8 @@ class Flasher():
         return self._curstr
 
     def flash(self):
-        print('Starting Etcher process with image {0} on disk {1}'.format(self._img.split('/')[-1], self._drive))
-        cmd = pkexec + etchr.format(self._drive,
+        print('Starting Etcher process with image \n{0} \non disk {1}'.format(self._img.split('/')[-1], self._drive))
+        cmd = etchr.format(self._drive,
                 self._unmount,
                 self._check,
                 self._confirm,
@@ -54,7 +53,6 @@ class Flasher():
         self._proc.poll()
 
     def kill(self):
-        #TODO cant kill because it is sudo
         self._proc.kill()
 
 

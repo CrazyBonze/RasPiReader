@@ -13,7 +13,7 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.dropdown import DropDown
-from kivy.properties import ObjectProperty, StringProperty, BooleanProperty
+from kivy.properties import NumericProperty, ObjectProperty, StringProperty, BooleanProperty
 from kivy.core.window import Window
 from kivy.adapters.listadapter import ListAdapter
 from kivy.network.urlrequest import UrlRequest
@@ -196,6 +196,7 @@ class FlashProgress(Popup):
     image = StringProperty()
     disk = StringProperty()
     progress_counter = StringProperty("0% eta 0s")
+    progress_value = NumericProperty(0)
     check = BooleanProperty()
     unmount = BooleanProperty()
 
@@ -223,12 +224,15 @@ class FlashProgress(Popup):
             finish_btn.bind(on_release=lambda x: self.finish())
             self.ids['command_button'].add_widget(finish_btn)
         self.progress_counter = update
+        value = re.search(r'\d+', update)
+        if value:
+            self.progress_value = int(value.group())/100
 
     def finish(self):
         self.dismiss()
 
     def cancel(self):
-        #self.f.kill()
+        self.f.kill()
         self.event.cancel()
         self.dismiss()
 
@@ -253,6 +257,7 @@ class CommitPage(Screen):
             self.dd.add_widget(btn)
         self.ids['dd_btn'].bind(on_release=self.dd.open)
         self.dd.bind(on_select=lambda instance, x: self.pick_sd(x))
+
 
     def pick_sd(self, x):
         self.sd = x
