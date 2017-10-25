@@ -1,5 +1,6 @@
 import subprocess
-import time #remove
+import os
+import time
 
 class img_mount:
     def __init__(self, img):
@@ -8,9 +9,10 @@ class img_mount:
         print('created loopback {0}'.format(self._loopback))
         self._loopmap = self.__map_loopback(self._loopback)
         print('created loopmap {0}'.format(self._loopmap))
-        time.sleep(1) #remove
         self._filesystems = self.__get_filesystem(self._loopmap)
         print('created filesystems {0}'.format(self._filesystems))
+        self._mounteddisks = self.__get_mounted(self._filesystems)
+        print('mounted disks {0}'.format(self._mounteddisks))
 
 
     def close(self):
@@ -30,7 +32,8 @@ class img_mount:
 
     def __create_loopback(self, img):
         loopback = self.__get_loopback()
-        p = subprocess.Popen('losetup {0} {1}'.format(loopback, img).split(),
+        code = 'losetup {0} {1}'.format(loopback, img).split()
+        p = subprocess.Popen(code,
                 shell=False,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE)
@@ -87,7 +90,13 @@ class img_mount:
 
     def __get_filesystem(self, loopmap):
         t = ()
-        #TODO wait for /dev/mapper to populate
+        for i in loopmap:
+            count = 0
+            while not os.path.islink('/dev/mapper/{0}'.format(i)):
+                time.sleep(0.01)
+                count+=1
+                if count > 100:
+                    return ('error: timed out', 'error: timed out')
         for i in loopmap:
             code = 'file -sL /dev/mapper/{0}'.format(i).split()
             p = subprocess.Popen(code,
@@ -98,8 +107,26 @@ class img_mount:
             t = t + (output.decode('utf-8'),)
         return t
 
-    def __mount(self, mapper):
-        pass
+    def __get_mounted(seld, filesystems):
+        t = ()
+        for i in filesystems:
+            label = ''
+            if 'UUID=' in i:
+                label = i.split('UUID=')[1].split()[0]
+                print("found UUID= {0}".format(label))
+            if 'label:' in i:
+                label = i.split('label:')[1].strip('\"\n ')
+                print("found label: {0}".format(label))
+            t = t + (label,)
+        return t
+
+    def __mount(self, loopmap):
+        #TODO needs to mount all mapped disks with names
+        code = 'mount /dev/mapper/{0} {1}'
+        p = subprocess.Popen(code,
+                shell=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE)
 
     def __umount(self, disk):
         p = subprocess.Popen('umount {0}'.format(disk).split(),
@@ -118,6 +145,7 @@ class img_mount:
 
 if __name__ == '__main__':
     img = img_mount('/home/micheal/RasPiReader/src/images/2017-08-16-raspbian-stretch/2017-08-16-raspbian-stretch.img')
+    time.sleep(30)
     img.close()
 
     '''
