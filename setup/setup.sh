@@ -10,7 +10,7 @@ fi
 if [ -f /etc/lsb-release ]; then
   $SUDO add-apt-repository -y ppa:kivy-team/kivy
   $SUDO apt-get update
-  $SUDO apt-get install -y python3.5 python3-pip python3-kivy
+  $SUDO apt-get install -y python3.5 python3-pip python3-kivy kpartx
   $SUDO apt-get autoremove
 fi
 
