@@ -1,5 +1,6 @@
 import subprocess
 import os
+import errno
 import time
 
 class img_mount:
@@ -122,11 +123,18 @@ class img_mount:
 
     def __mount(self, loopmap):
         #TODO needs to mount all mapped disks with names
-        code = 'mount /dev/mapper/{0} {1}'
-        p = subprocess.Popen(code,
-                shell=False,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE)
+        cwd = os.getcwd()+'/'
+        for i in loopmap:
+            try:
+                os.makedirs(i)
+            except OSError as e:
+                if e.errno != errno.EEXIST:
+                    raise
+            code = 'mount /dev/mapper/{0} {1}'
+            p = subprocess.Popen(code,
+                    shell=False,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE)
 
     def __umount(self, disk):
         p = subprocess.Popen('umount {0}'.format(disk).split(),
