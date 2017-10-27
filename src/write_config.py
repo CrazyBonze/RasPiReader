@@ -10,13 +10,9 @@ def _mount(sdcard):
         return False
     return True
 
-# Takes a dictionary of settings and their values 
+# Takes a dictionary of settings and their values
 # and writes them to sdcard/boot/config.txt
-def write_config(sdcard, options):
-
-    if not os.path.ismount(sdcard):
-        _mount(sdcard)
-
+def write_config(path, options):
     config_path = os.path.join(sdcard, "boot/config.txt")
     config_file = open(config_path, 'w')
     settings = [

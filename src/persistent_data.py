@@ -11,34 +11,46 @@ class Singleton(object):
 class PersistentData(Singleton):
     pass
 
-    ISOFile = ""
+    IMGFile = ""
     DownloadImg = []
-    Settings = {}
+    ConfigSettings = {}
+    ConfigDirty = False
     DiskSD = ""
     WIFI = {}
+    WIFIDirty = False
 
-    def setISOFile(self, f):
-        PersistentData.ISOFile = f
+    def setIMGFile(self, f):
+        PersistentData.IMGFile = f
 
-    def getISOFile(self):
-        return PersistentData.ISOFile
+    def getIMGFile(self):
+        return PersistentData.IMGFile
 
-    def setDownloadImg(self, iso):
-        PersistentData.DownloadImg = iso
+    def setDownloadImg(self, img):
+        PersistentData.DownloadImg = img
 
     def getDownloadImg(self):
         return PersistentData.DownloadImg
 
     def setWIFI(self, wifi):
+        PersistentData.WIFIDirty = True
         PersistentData.WIFI = wifi
+
+    def clearWIFI(self):
+        PersistentData.WIFIDirty = False
+        PersistentData.WIFI = {}
 
     def getWIFI(self):
         return PersistentData.WIFI
 
-    def setSettings(self, settings):
-        PersistentData.Settings = settings
+    def addConfigSetting(self, key, value):
+        PersistentData.ConfigDirty = True
+        PersistentData.ConfigSettings[key] = value
 
-    def getSettings(self):
+    def clearConfigSettings(self):
+        PersistentData.ConfigDirty = False
+        PersistentData.ConfigSettings = {}
+
+    def getConfigSettings(self):
         return PersistentData.Settings
 
     def setDiskSD(self, disk):
@@ -48,11 +60,14 @@ class PersistentData(Singleton):
         return PersistentData.DiskSD
 
     def writeToFile(self, f):
-        print(f)
+        if validate():
+            print('Commiting to disk {0}.'.format(PersistentData.DiskSD[0]))
+        else:
+            print('Failed validation check!')
 
     def validate(self):
-        #check if iso exists
-        if not Path(PersistentData.ISOFile).is_file():
+        #check if img exists
+        if not Path(PersistentData.IMGFile).is_file():
             return False
         #check if sd card is usable
         sd_path = '/dev/{0}'.format(PersistentData.DiskSD[0])
@@ -61,7 +76,7 @@ class PersistentData(Singleton):
         return True
 
     def print_to_screen(self):
-        print('ISOFile:\t{0}'.format(PersistentData.ISOFile))
+        print('IMGFile:\t{0}'.format(PersistentData.IMGFile))
         print('DiskSD:\t\t{0}'.format(PersistentData.DiskSD))
-        print('Settings:\t{0}'.format(PersistentData.Settings))
+        print('Config Settings:\t{0}'.format(PersistentData.ConfigSettings))
         print('WiFi:\t\t{0}'.format(PersistentData.WIFI))

@@ -130,7 +130,6 @@ class img_mount:
     def __mount(self, loopmap, filesystems):
         #TODO needs to mount all mapped disks with names
         cwd = os.getcwd()+'/'
-        print(zip(loopmap, filesystems))
         for lm,fs in zip(loopmap, filesystems):
             mnt_point = cwd+fs
             try:
@@ -139,11 +138,17 @@ class img_mount:
                 if e.errno != errno.EEXIST:
                     raise
             code = 'mount /dev/mapper/{0} {1}'.format(lm, mnt_point).split()
-            print(code)
             p = subprocess.Popen(code,
                     shell=False,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.PIPE)
+            output, err = p.communicate()
+            if output:
+                print('mount')
+                print(output.decode('utf-8'))
+            if err:
+                print('mount')
+                print(err.decode('utf-8'))
 
     def __umount(self, disks):
         for d in disks:

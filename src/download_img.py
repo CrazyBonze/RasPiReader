@@ -45,7 +45,7 @@ def image_list():
     return result_list[::-1];
 
 # result is a member of result_list from image_list().
-def download_iso(result):
+def download_img(result):
     # Parse the folder for the name of the image name (version number/date).
     url_download = urllib.request.urlopen(base_url + result).read().decode('utf-8')
     download_name = re.findall('20[0-9][0-9]-[0-9][0-9]-[0-9][0-9][a-z\-]+\.zip',url_download)
@@ -65,4 +65,4 @@ if __name__ == '__main__':
     print(img)
     print(img[1])
     #print(fake_image_list())
-    print(download_iso(img[1]))
+    print(download_img(img[1]))

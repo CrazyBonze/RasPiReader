@@ -121,10 +121,10 @@
   text: root.image
   size_hint_y: None
   height: 30
-  on_release: app.root.DLISODialog.setDLImage(root.image)
+  on_release: app.root.DLIMGDialog.setDLImage(root.image)
 
-<DownloadISODialog>:
-  on_open: app.root.DLISODialog=self
+<DownloadIMGDialog>:
+  on_open: app.root.DLIMGDialog=self
   title: "Pick image"
   dl_image: None
   dl_disable: True
@@ -142,7 +142,7 @@
         text: "Cancel"
         on_release: root.cancel()
 
-<LoadISODialog>:
+<LoadIMGDialog>:
   title: filechooser.path
   choosen_file: None
   BoxLayout:
@@ -204,8 +204,8 @@
         height: 30
         multiline: False
         disabled: True
-        id: iso_label
-        text: root.iso_file
+        id: img_label
+        text: root.img_file
       Button:
         size_hint: .2, None
         height: 30

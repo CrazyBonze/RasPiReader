@@ -30,7 +30,7 @@ data = PersistentData()
 class DownloadButton(Button):
     image = StringProperty()
 
-class DownloadISODialog(Popup):
+class DownloadIMGDialog(Popup):
     stop = threading.Event()
     def getdownloadlist(self):
         download_list = data.getDownloadImg()
@@ -70,13 +70,13 @@ class DownloadISODialog(Popup):
         self.dl_disable = True
         self.dismiss()
 
-class LoadISODialog(Popup):
+class LoadIMGDialog(Popup):
     def load(self, path, selection):
         if not selection:
             return
         self.choosen_file = selection[0]
         Window.title = selection[0][selection[0].rfind(os.sep) + 1:]
-        data.setISOFile(selection[0])
+        data.setIMGFile(selection[0])
         self.dismiss()
 
     def cancel(self):
@@ -122,7 +122,7 @@ class DownloadProgress(Popup):
     zip_file = ""
 
     def download_content(self, f):
-        file_tuple = download_iso(f)
+        file_tuple = download_img(f)
         self.zip_file = file_tuple[1]
         req = UrlRequest(file_tuple[0], on_progress=self.update_progress,
                 chunk_size=32768, on_success=self.finish,
@@ -164,19 +164,19 @@ class DownloadProgress(Popup):
         self.dismiss()
 
 class StartPage(Screen):
-    iso_file = StringProperty('No Image Chosen')
+    img_file = StringProperty('No Image Chosen')
     download_file = StringProperty('Pick Image')
     download_disable = BooleanProperty(True)
-    def get_iso_file(self):
-        return data.getISOFile()
+    def get_img_file(self):
+        return data.getIMGFile()
 
     def file_pick(self):
-        self.load_dialog = LoadISODialog()
+        self.load_dialog = LoadIMGDialog()
         self.load_dialog.open()
-        self.load_dialog.bind(choosen_file=self.setter('iso_file'))
+        self.load_dialog.bind(choosen_file=self.setter('img_file'))
 
     def download_pick(self):
-        self.download_dialog = DownloadISODialog()
+        self.download_dialog = DownloadIMGDialog()
         self.download_dialog.open()
         self.download_dialog.bind(dl_image=self.setter('download_file'))
         self.download_dialog.bind(dl_disable=self.setter('download_disable'))
@@ -204,7 +204,7 @@ class FlashProgress(Popup):
         super(FlashProgress, self).__init__(**kwargs)
         self.f = None
         self.event = None
-        self.image = data.getISOFile()
+        self.image = data.getIMGFile()
         self.disk = '/dev/{0}'.format(data.getDiskSD()[0])
 
     def flash_card(self):
