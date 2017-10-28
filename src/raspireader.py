@@ -223,10 +223,18 @@ class FlashProgress(Popup):
             finish_btn = Button(text= "Dismiss")
             finish_btn.bind(on_release=lambda x: self.finish())
             self.ids['command_button'].add_widget(finish_btn)
-        self.progress_counter = update
-        value = re.search(r'\d+', update)
-        if value:
-            self.progress_value = int(value.group())/100
+        elif update:
+            regex = re.compile(".*\[(.*?)\]")
+            prog = ''
+            try:
+                prog = '[{0}]'.format(re.findall(regex, update)[0])
+                update = update.replace(prog, '')
+                self.progress_counter = update
+                value = re.search(r'\d+', update)
+                if value:
+                    self.progress_value = int(value.group())/100
+            except:
+                print(update)
 
     def finish(self):
         self.dismiss()

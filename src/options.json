@@ -1,6 +1,6 @@
 {
   "Memory": {
-    "description": "",
+    "description": "Some stuff",
     "settings": {
       "disable_l2cache": {
         "default": 0,
