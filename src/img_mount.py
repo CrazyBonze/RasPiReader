@@ -5,6 +5,7 @@ import time
 
 class img_mount:
     def __init__(self, img):
+        self.__nautilus_state(False)
         self._image = img
         self._loopback = self.__create_loopback(self._image)
         print('created loopback {0}'.format(self._loopback))
@@ -15,6 +16,7 @@ class img_mount:
         self._disks = self.__get_disks(self._filesystems)
         print('disks {0}'.format(self._disks))
         self.__mount(self._loopmap, self._disks)
+        self.__nautilus_state(True)
 
 
     def close(self):
@@ -127,8 +129,23 @@ class img_mount:
                 print("found label: {0}".format(label))
         return t
 
+    def __nautilus_state(self, state):
+        nautilus = 'gsettings set org.gnome.desktop.media-handling automount-open {0}'.format(str(state).lower())
+        print(nautilus)
+        p = subprocess.Popen(nautilus.split(),
+                    shell=False,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE)
+        output, err = p.communicate()
+        if output:
+            print('nautlius state')
+            print(output.decode('utf-8'))
+        if err:
+            print('nautlius state')
+            print(err.decode('utf-8'))
+        time.sleep(1)
+
     def __mount(self, loopmap, filesystems):
-        #TODO needs to mount all mapped disks with names
         cwd = os.getcwd()+'/'
         for lm,fs in zip(loopmap, filesystems):
             mnt_point = cwd+fs
@@ -174,7 +191,8 @@ class img_mount:
 
 
 if __name__ == '__main__':
-    img = img_mount('/home/micheal/RasPiReader/src/images/2017-08-16-raspbian-stretch/2017-08-16-raspbian-stretch.img')
+    i = '/home/michael/RasPiReader/src/images/2017-09-07-raspbian-stretch/2017-09-07-raspbian-stretch.img'
+    img = img_mount(i)
     time.sleep(5)
     img.close()
 
