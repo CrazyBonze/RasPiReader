@@ -192,8 +192,40 @@ class StartPage(Screen):
         self.download_progress.open()
         self.download_progress.download_content(f)
 
-class Option(BoxLayout):
-    pass
+class Setting(BoxLayout):
+    def __init__(self, label, setting, **kwargs):
+        super(Setting, self).__init__(**kwargs)
+        Clock.schedule_once(self._finish_init)
+        self._setting = setting
+        self.label = label
+
+    def _finish_init(self, dt):
+        print(self._setting)
+        self.add_widget(Label(text=self.label))
+
+
+class OptScreen(Screen):
+    def __init__(self, options, **kwargs):
+        super(OptScreen, self).__init__(**kwargs)
+        Clock.schedule_once(self._finish_init)
+        self._options = options
+
+    def _finish_init(self, dt):
+        print("building {0}".format(self.name))
+        print(self._options)
+        self.layout = GridLayout(cols=1, size_hint_y=None)
+        self.layout.bind(minimum_height=self.layout.setter('height'))
+        for setting in self._options["settings"]:
+            print(setting)
+            s = Setting(setting, self._options["settings"][setting])
+            s.size_hint_y = None
+            s.height = 60
+            self.layout.add_widget(s)
+        self.view = ScrollView(size=self.size)
+        self.add_widget(self.view)
+        self.view.add_widget(self.layout)
+
+
 
 class OptionsPage(Screen):
     def __init__(self, **kwargs):
@@ -211,8 +243,8 @@ class OptionsPage(Screen):
             btn = Button(text=opt)
             btn.bind(on_release=lambda btn: self.switchpage(btn.text))
             self.optionsmenue.add_widget(btn)
-            screen = Screen(name=opt)
-            screen.add_widget(Label(text=opt))
+            screen = OptScreen(self.opts[opt])
+            screen.name = opt
             self.optionsmanager.add_widget(screen)
 
     def test(self):
