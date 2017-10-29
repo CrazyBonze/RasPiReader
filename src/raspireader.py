@@ -22,6 +22,7 @@ from threading import Thread
 from download_img import *
 from list_disk import *
 from flash import *
+import json
 
 # Persistent Data
 from persistent_data import PersistentData
@@ -110,6 +111,9 @@ class Footer(AnchorLayout):
 
 class RootWidget(FloatLayout):
     stop = threading.Event()
+    def __init__(self, **kwargs):
+        super(RootWidget, self).__init__(**kwargs)
+
     def print_to_screen(self):
         data.print_to_screen()
 
@@ -188,9 +192,35 @@ class StartPage(Screen):
         self.download_progress.open()
         self.download_progress.download_content(f)
 
+class Option(BoxLayout):
+    pass
 
 class OptionsPage(Screen):
-    pass
+    def __init__(self, **kwargs):
+        super(OptionsPage, self).__init__(**kwargs)
+        print("Options Page")
+        with open('options.json') as options_data:
+            self.opts = json.load(options_data)
+        print(self.opts)
+        Clock.schedule_once(self._finish_init)
+
+    def _finish_init(self, dt):
+        self.optionsmenue = self.ids.optionsmenue
+        self.optionsmanager = self.ids.optionsmanager
+        for opt in self.opts:
+            btn = Button(text=opt)
+            btn.bind(on_release=lambda btn: self.switchpage(btn.text))
+            self.optionsmenue.add_widget(btn)
+            screen = Screen(name=opt)
+            screen.add_widget(Label(text=opt))
+            self.optionsmanager.add_widget(screen)
+
+    def test(self):
+        print(self.ids)
+
+    def switchpage(self, page):
+        print(page)
+        self.optionsmanager.current = page
 
 class FlashProgress(Popup):
     image = StringProperty()

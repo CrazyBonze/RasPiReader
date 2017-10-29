@@ -233,66 +233,11 @@
   GridLayout:
     rows:2
     BoxLayout:
+      id: optionsmenue
       size_hint: 1, 0.1
-      Button:
-        text: "Memory"
-        on_press: root.ids.optionsmanager.current = "Memory"
-      Button:
-        text: "Camera"
-        on_press: root.ids.optionsmanager.current = "Camera"
-      Button:
-        text: "Network"
-        on_press: root.ids.optionsmanager.current = "Network"
-      Button:
-        text: "A/V"
-        on_press: root.ids.optionsmanager.current = "AV"
-      Button:
-        text: "Codecs"
-        on_press: root.ids.optionsmanager.current = "Codecs"
-      Button:
-        text: "Overclocking"
-        on_press: root.ids.optionsmanager.current = "Overclocking"
-      Button:
-        text: "USB Power"
-        on_press: root.ids.optionsmanager.current = "USB Power"
-      Button:
-        text: "Misc."
-        on_press: root.ids.optionsmanager.current = "Misc"
     ScreenManager:
       id: optionsmanager
       size_hint: 1, 0.9
-      Screen:
-        name: "Memory"
-        Label:
-          text: "Memory"
-      Screen:
-        name: "Camera"
-        Label:
-          text: "Camera"
-      Screen:
-        name: "Network"
-        Label:
-          text: "Network"
-      Screen:
-        name: "AV"
-        Label:
-          text: "Audio/Video"
-      Screen:
-        name: "Codecs"
-        Label:
-          text: "Codecs"
-      Screen:
-        name: "Overclocking"
-        Label:
-          text: "Overclocking"
-      Screen:
-        name: "USB Power"
-        Label:
-          text: "USB Power"
-      Screen:
-        name: "Misc"
-        Label:
-          text: "Miscellaneous"
 
 <DropDownButton>:
   sd_not_chosen: True
