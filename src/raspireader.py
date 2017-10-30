@@ -203,21 +203,17 @@ class Setting(BoxLayout):
         print(self._setting)
         self.add_widget(Label(text=self.label))
 
-
 class OptScreen(Screen):
-    def __init__(self, options, **kwargs):
+    def __init__(self, settings, **kwargs):
         super(OptScreen, self).__init__(**kwargs)
         Clock.schedule_once(self._finish_init)
-        self._options = options
+        self._settings = settings
 
     def _finish_init(self, dt):
-        print("building {0}".format(self.name))
-        print(self._options)
         self.layout = GridLayout(cols=1, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
-        for setting in self._options["settings"]:
-            print(setting)
-            s = Setting(setting, self._options["settings"][setting])
+        for setting in self._settings:
+            s = Setting(setting['name'], setting)
             s.size_hint_y = None
             s.height = 60
             self.layout.add_widget(s)
@@ -225,30 +221,23 @@ class OptScreen(Screen):
         self.add_widget(self.view)
         self.view.add_widget(self.layout)
 
-
-
 class OptionsPage(Screen):
     def __init__(self, **kwargs):
         super(OptionsPage, self).__init__(**kwargs)
-        print("Options Page")
         with open('options.json') as options_data:
             self.opts = json.load(options_data)
-        print(self.opts)
         Clock.schedule_once(self._finish_init)
 
     def _finish_init(self, dt):
         self.optionsmenue = self.ids.optionsmenue
         self.optionsmanager = self.ids.optionsmanager
-        for opt in self.opts:
-            btn = Button(text=opt)
+        for section in self.opts['sections']:
+            btn = Button(text=section['title'])
             btn.bind(on_release=lambda btn: self.switchpage(btn.text))
             self.optionsmenue.add_widget(btn)
-            screen = OptScreen(self.opts[opt])
-            screen.name = opt
+            screen = OptScreen(section['settings'])
+            screen.name = section['title']
             self.optionsmanager.add_widget(screen)
-
-    def test(self):
-        print(self.ids)
 
     def switchpage(self, page):
         print(page)
@@ -327,7 +316,6 @@ class CommitPage(Screen):
             self.dd.add_widget(btn)
         self.ids['dd_btn'].bind(on_release=self.dd.open)
         self.dd.bind(on_select=lambda instance, x: self.pick_sd(x))
-
 
     def pick_sd(self, x):
         self.sd = x

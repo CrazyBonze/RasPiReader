@@ -1,57 +1,121 @@
 {
-  "Memory": {
-    "description": "Some stuff",
-    "settings": {
-      "disable_l2cache": {
-        "default": 0,
-        "enable": false,
-        "description": "disable ARM access to GPU's L2 cache. Needs corresponding L2 disabled kernel."
-      },
-      "gpu_mem": {
-        "default": 128,
-        "enable": false,
-        "description": "GPU memory in megabyte. Sets the memory split between the ARM and GPU. ARM gets the remaining memory. Min 16."
-      },
-      "gpu_mem_256": {
-        "default": 128,
-        "enable": false,
-        "description": "GPU memory in megabyte for the 256 MB Raspberry Pi. Ignored by the 512 MB RP. Overrides gpu_mem. Max 192."
-      },
-      "gpu_mem_512": {
-        "default": null,
-        "enable": false,
-        "description": "GPU memory in megabyte for the 512 MB Raspberry Pi. Ignored by the 256 MB RP. Overrides gpu_mem. Max 448."
-      },
-      "gpu_mem_1024": {
-        "default": 944,
-        "enable": false,
-        "description": "GPU memory allocation in MB for 1024MB board revision. This option overrides gpu_mem."
-      },
-      "disable_pvt": {
-        "default": 1,
-        "enable": false,
-        "description": "Disable adjusting the refresh rate of RAM every 500 ms (measuring RAM temperature)."
-      },
-      "cma_lwm": {
-        "default": 16,
-        "enable": false,
-        "description": "When GPU has less than cma_lwm (low water mark) memory available it will request some from ARM."
-      }
+  "sections": [
+    {
+      "title": "Memory",
+      "description": "",
+      "settings": [
+        {
+          "name": "disable_l2cache",
+          "type": "bool",
+          "default": 0,
+          "enable": false,
+          "description": "Disable ARM access to GPU's L2 cache. Needs corresponding L2 disabled kernel."
+        },
+        {
+          "name": "gpu_mem",
+          "type": "slider",
+          "default": 64,
+          "min": 16,
+          "max": 192,
+          "enable": false,
+          "description": "GPU memory in megabyte. Sets the memory split between the ARM and GPU. ARM gets the remaining memory. Min 16."
+        },
+        {
+          "name": "gpu_mem_256",
+          "type": "slider",
+          "default": 128,
+          "min": 16,
+          "max": 192,
+          "enable": false,
+          "description": "GPU memory in megabyte for the 256 MB Raspberry Pi. Ignored by the 512 MB RP. Overrides gpu_mem. Max 192."
+        },
+        {
+          "name": "gpu_mem_512",
+          "type": "slider",
+          "default": 128,
+          "min": 16,
+          "max": 448,
+          "enable": false,
+          "description": "GPU memory in megabyte for the 512 MB Raspberry Pi. Ignored by the 256 MB RP. Overrides gpu_mem. Max 448."
+        },
+        {
+          "name": "gpu_mem_1024",
+          "type": "slider",
+          "default": 128,
+          "min": 16,
+          "max": 944,
+          "enable": false,
+          "description": "GPU memory allocation in MB for 1024MB board revision. This option overrides gpu_mem."
+        },
+        {
+          "name": "disable_pvt",
+          "type": "bool",
+          "default": 1,
+          "enable": false,
+          "description": "Disable adjusting the refresh rate of RAM every 500 ms (measuring RAM temperature)."
+        },
+        {
+          "name": "cma_lwm",
+          "default": 16,
+          "enable": false,
+          "description": "When GPU has less than cma_lwm (low water mark) memory available it will request some from ARM."
+        }
+      ]
+    },
+    {
+      "title": "Codecs",
+      "description": "Hardware decoding of additional codecs can be enabled by purchasing a license that is locked to the CPU serial number of your Raspberry Pi. Up to 8 licenses per CODEC can be specified as a comma seperated list.",
+      "settings": [
+        {
+          "name": "decode_MPG2",
+          "type": "text",
+          "default": "0x12345678",
+          "enable": false,
+          "description": "License key to allow hardware MPEG-2 decoding."
+        },
+        {
+          "name": "decode_WVC1",
+          "type": "text",
+          "default": "0x12345678",
+          "enable": false,
+          "description": "License key to allow hardware VC-1 decoding."
+        }
+      ]
+    },
+    {
+      "title": "Video",
+      "settings": [],
+      "description": ""
+    },
+    {
+      "title": "Audio",
+      "settings": [],
+      "description": "The onboard audio output uses config options to change the way the analogue audio is driven, and whether some firmware features are enabled or not."
+    },
+    {
+      "title": "Camera",
+      "settings": [],
+      "description": ""
+    },
+    {
+      "title": "Boot",
+      "settings": [],
+      "description": ""
+    },
+    {
+      "title": "Device Tree",
+      "settings": [],
+      "description": ""
+    },
+    {
+      "title": "Overclock",
+      "settings": [],
+      "description": ""
+    },
+    {
+      "title": "Misc.",
+      "settings": [],
+      "description": ""
     }
-  },
-  "Codecs": {
-    "description": "Hardware decoding of additional codecs can be enabled by purchasing a license that is locked to the CPU serial number of your Raspberry Pi. Up to 8 licenses per CODEC can be specified as a comma seperated list.",
-    "settings": {
-      "decode_MPG2": {
-        "default": "0x12345678",
-        "enable": false,
-        "description": "License key to allow hardware MPEG-2 decoding."
-      },
-      "decode_WVC1": {
-        "default": "0x12345678",
-        "enable": false,
-        "description": "License key to allow hardware VC-1 decoding."
-      }
-    }
-  }
+  ]
 }
