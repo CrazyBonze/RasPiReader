@@ -128,19 +128,27 @@
   title: "Pick image"
   dl_image: None
   dl_disable: True
-  BoxLayout:
-    size: root.size
-    pos: root.pos
-    orientation: "vertical"
+  StackLayout:
+    id: layout1
+    orientation: 'lr-bt'
+    Button:
+      text: "Cancel"
+      size_hint: 0.9, 0.05
+      on_release: root.cancel()
     ScrollView:
       id: scroll_view
-      size: self.size
-    BoxLayout:
-      size_hint_y: None
-      height: 30
-      Button:
-        text: "Cancel"
-        on_release: root.cancel()
+      size_hint: 0.9, 0.95
+      GridLayout:
+        id: layout2
+        cols: 1
+        size_hint_y: None
+    Slider:
+      id: slider
+      min: 0
+      max: 1
+      value: 25
+      orientation: 'vertical'
+      size_hint: 0.1, 0.95
 
 <LoadIMGDialog>:
   title: filechooser.path

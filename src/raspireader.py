@@ -9,6 +9,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.selectableview import SelectableView
+from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
@@ -18,6 +19,7 @@ from kivy.core.window import Window
 from kivy.adapters.listadapter import ListAdapter
 from kivy.network.urlrequest import UrlRequest
 import os, threading, zipfile, re
+from functools import partial
 from threading import Thread
 from download_img import *
 from list_disk import *
@@ -37,29 +39,33 @@ class DownloadIMGDialog(Popup):
         download_list = data.getDownloadImg()
         if not download_list:
             print("Fetching download list")
-            self.ids.scroll_view.add_widget(Label(text='Loading...'))
-            Thread(target=self.worker).start()
+            self.ids.layout2.add_widget(Label(text='Loading...'))
+            Thread(target=self.scrollPopup).start()
         else:
             print("already fetched download list")
-            self.layout = GridLayout(cols=1, size_hint_y=None)
-            self.layout.bind(minimum_height=self.layout.setter('height'))
-            self.ids.scroll_view.add_widget(self.layout)
-            for i in download_list:
-                btn = DownloadButton()
-                btn.image = i
-                self.layout.add_widget(btn)
+            self.scrollPopup()
 
-    def worker(self):
+    def scrollPopup(self):
         images = image_list()
-        self.ids.scroll_view.clear_widgets()
         data.setDownloadImg(images)
-        self.layout = GridLayout(cols=1, size_hint_y=None)
-        self.layout.bind(minimum_height=self.layout.setter('height'))
-        self.ids.scroll_view.add_widget(self.layout)
+        scrlv = self.ids.scroll_view
+        s = self.ids.slider
+        layout2 = self.ids.layout2
+        layout2.clear_widgets()
+        scrlv.bind(scroll_y=partial(self.slider_change, s))
+        s.bind(value=partial(self.scroll_change, scrlv))
+        layout2.bind(minimum_height=layout2.setter('height'))
         for i in images:
             btn = DownloadButton()
             btn.image = i
-            self.layout.add_widget(btn)
+            layout2.add_widget(btn)
+
+    def scroll_change(self, scrlv, instance, value):
+        scrlv.scroll_y = value
+
+    def slider_change(self, s, instance, value):
+        if value >= 0:
+            s.value = value
 
     def setDLImage(self, img):
         self.dl_image = img
@@ -192,7 +198,7 @@ class StartPage(Screen):
         self.download_progress.open()
         self.download_progress.download_content(f)
 
-class Setting(BoxLayout):
+class Setting(GridLayout):
     def __init__(self, label, setting, **kwargs):
         super(Setting, self).__init__(**kwargs)
         Clock.schedule_once(self._finish_init)
@@ -200,8 +206,21 @@ class Setting(BoxLayout):
         self.label = label
 
     def _finish_init(self, dt):
-        print(self._setting)
-        self.add_widget(Label(text=self.label))
+        self.rows = 2
+        self.cols = 2
+        self.height = 100
+        self.setting_type = ''
+        try:
+            self.setting_type = self._setting['type']
+        except:
+            print("error")
+        if(self.setting_type == 'bool'):
+            self.add_widget(Label(text=self.label))
+            btn1 = ToggleButton(text='Male', group='sex',)
+            self.add_widget(btn1)
+        else:
+            self.add_widget(Label(text=self.label))
+
 
 class OptScreen(Screen):
     def __init__(self, settings, **kwargs):
