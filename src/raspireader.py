@@ -10,6 +10,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.selectableview import SelectableView
 from kivy.uix.togglebutton import ToggleButton
+from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
@@ -164,10 +165,6 @@ class DownloadProgress(Popup):
         os.remove(self.zip_file)
         self.dismiss()
 
-    def suspend(self):
-        #leave partial file
-        self.dismiss()
-
     def cancel(self):
         #delete partial file
         os.remove(self.zip_file)
@@ -198,6 +195,15 @@ class StartPage(Screen):
         self.download_progress.open()
         self.download_progress.download_content(f)
 
+class SettingInfo(GridLayout):
+    pass
+
+class BoolSetting(GridLayout):
+    pass
+
+class SliderSetting(GridLayout):
+    pass
+
 class Setting(GridLayout):
     def __init__(self, label, setting, **kwargs):
         super(Setting, self).__init__(**kwargs)
@@ -206,7 +212,6 @@ class Setting(GridLayout):
         self.label = label
 
     def _finish_init(self, dt):
-        self.rows = 2
         self.cols = 2
         self.height = 100
         self.setting_type = ''
@@ -215,9 +220,22 @@ class Setting(GridLayout):
         except:
             print("error")
         if(self.setting_type == 'bool'):
-            self.add_widget(Label(text=self.label))
-            btn1 = ToggleButton(text='Male', group='sex',)
-            self.add_widget(btn1)
+            info = SettingInfo()
+            info.ids.name.text = self._setting['name']
+            info.ids.enable.value = self._setting['enable']
+            self.add_widget(info)
+            bset = BoolSetting()
+            self.add_widget(bset)
+        elif(self.setting_type == 'slider'):
+            info = SettingInfo()
+            info.ids.name.text = self._setting['name']
+            info.ids.enable.value = self._setting['enable']
+            self.add_widget(info)
+            sldr = SliderSetting()
+            sldr.ids.slider.min = self._setting['min']
+            sldr.ids.slider.max = self._setting['max']
+            sldr.ids.slider.value = self._setting['default']
+            self.add_widget(sldr)
         else:
             self.add_widget(Label(text=self.label))
 
