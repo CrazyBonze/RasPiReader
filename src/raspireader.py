@@ -254,7 +254,7 @@ class OptScreen(Screen):
             s.size_hint_y = None
             s.height = 60
             self.layout.add_widget(s)
-        self.view = ScrollView(size=self.size)
+        self.view = ScrollView(size=self.size, scroll_type=['bars'])
         self.add_widget(self.view)
         self.view.add_widget(self.layout)
 
