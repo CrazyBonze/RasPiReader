@@ -15,6 +15,7 @@ from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.dropdown import DropDown
+from kivy.uix.bubble import Bubble
 from kivy.properties import NumericProperty, ObjectProperty, StringProperty, BooleanProperty
 from kivy.core.window import Window
 from kivy.adapters.listadapter import ListAdapter
@@ -89,7 +90,7 @@ class LoadIMGDialog(Popup):
 
     def cancel(self):
         self.dismiss()
-
+'''
 class SaveDialog(Popup):
     def save(self, path, selection):
         _file = codect.open(selection, 'w', encoding='utf8')
@@ -100,6 +101,7 @@ class SaveDialog(Popup):
 
     def cancel(self):
         self.dismiss()
+'''
 
 class HeaderButtons(BoxLayout):
     pass
@@ -138,7 +140,6 @@ class DownloadProgress(Popup):
         req = UrlRequest(file_tuple[0], on_progress=self.update_progress,
                 chunk_size=32768, on_success=self.finish,
                 file_path=file_tuple[1])
-
 
     def update_progress(self, request, current_size, total_size):
         progress = current_size / total_size
@@ -195,8 +196,31 @@ class StartPage(Screen):
         self.download_progress.open()
         self.download_progress.download_content(f)
 
+class InfoPopup(Popup):
+    def __init__(self, label, desc, **kwargs):
+        super(InfoPopup, self).__init__(**kwargs)
+        self.label = label
+        self.description = desc
+        Clock.schedule_once(self._finish_init)
+
+    def _finish_init(self, dt):
+        self.title = self.label
+        self.ids.desc.text = self.description
+
+
 class SettingInfo(GridLayout):
-    pass
+    def __init__(self, setting, **kwargs):
+        super(SettingInfo, self).__init__(**kwargs)
+        Clock.schedule_once(self._finish_init)
+        self._setting = setting
+
+    def _finish_init(self, dt):
+        self.ids.info_bubble.bind(on_release=self.show_info_pop)
+
+    def show_info_pop(self, dt):
+        info_pop = InfoPopup(self._setting['name'],
+                self._setting['description'])
+        info_pop.open()
 
 class simplesetting(GridLayout):
     enable = BooleanProperty()
@@ -233,12 +257,12 @@ class Setting(GridLayout):
         self.setting_type = ''
         try:
             self.setting_type = self._setting['type']
-            info = SettingInfo()
+            info = SettingInfo(self._setting)
             info.ids.name.text = self._setting['name']
             info.ids.enable.value = self._setting['enable']
             self.add_widget(info)
-        except:
-            print("error")
+        except Exception as e:
+            print(e)
         if(self.setting_type == 'bool'):
             bset = BoolSetting()
             self.add_widget(bset)

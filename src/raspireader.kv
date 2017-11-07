@@ -282,17 +282,37 @@
     step: 1
     disabled: True
 
+<InfoPopup>:
+  size_hint: None, None
+  size: 400, 400
+  BoxLayout:
+    orientation: 'vertical'
+    Label:
+      id: desc
+      text_size: self.width, None
+      halign: 'center'
+      text: "Default"
+    BoxLayout:
+      id: command_button
+      size_hint_y: None
+      height: 30
+      Button:
+        text: "Close"
+        on_release: root.dismiss()
+
 <SettingInfo>:
   rows: 2
+  cols: 2
   Label:
     id: name
     text: "tmp"
-  GridLayout:
-    cols: 2
-    Label:
-      text: "Enable setting"
-    CheckBox:
-      id: enable
+  Button:
+    id: info_bubble
+    text: "Description"
+  Label:
+    text: "Enable setting"
+  CheckBox:
+    id: enable
 
 <DropDownButton>:
   sd_not_chosen: True
