@@ -198,19 +198,27 @@ class StartPage(Screen):
 class SettingInfo(GridLayout):
     pass
 
-class TextSetting(GridLayout):
+class simplesetting(GridLayout):
     enable = BooleanProperty()
-    pass
+    def __init__(self, **kwargs):
+        super(simplesetting, self).__init__(**kwargs)
+        data.pushOptionState(self)
 
-class BoolSetting(GridLayout):
-    enable = BooleanProperty()
-    state = BooleanProperty(True)
     def get_state(self):
-        print(state)
+        return "Simple Setting"
 
-class SliderSetting(GridLayout):
-    enable = BooleanProperty(True)
-    pass
+class TextSetting(simplesetting):
+    def __init__(self, **kwargs):
+        super(TextSetting, self).__init__(**kwargs)
+
+class BoolSetting(simplesetting):
+    state = BooleanProperty(True)
+    def __init__(self, **kwargs):
+        super(BoolSetting, self).__init__(**kwargs)
+
+class SliderSetting(simplesetting):
+    def __init__(self, **kwargs):
+        super(SliderSetting, self).__init__(**kwargs)
 
 class Setting(GridLayout):
     def __init__(self, label, setting, **kwargs):

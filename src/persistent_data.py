@@ -18,6 +18,7 @@ class PersistentData(Singleton):
     DiskSD = ""
     WIFI = {}
     WIFIDirty = False
+    OptionStates = []
 
     def setIMGFile(self, f):
         PersistentData.IMGFile = f
@@ -59,6 +60,9 @@ class PersistentData(Singleton):
     def getDiskSD(self):
         return PersistentData.DiskSD
 
+    def pushOptionState(self, state):
+        PersistentData.OptionStates.append(state)
+
     def writeToFile(self, f):
         if validate():
             print('Commiting to disk {0}.'.format(PersistentData.DiskSD[0]))
@@ -80,3 +84,8 @@ class PersistentData(Singleton):
         print('DiskSD:\t\t{0}'.format(PersistentData.DiskSD))
         print('Config Settings:\t{0}'.format(PersistentData.ConfigSettings))
         print('WiFi:\t\t{0}'.format(PersistentData.WIFI))
+        print('Option States:')
+        for i in PersistentData.OptionStates:
+            print(i.get_state())
+
+
