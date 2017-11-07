@@ -90,35 +90,8 @@ class LoadIMGDialog(Popup):
 
     def cancel(self):
         self.dismiss()
-'''
-class SaveDialog(Popup):
-    def save(self, path, selection):
-        _file = codect.open(selection, 'w', encoding='utf8')
-        _file.write(self.text)
-        Window.title = selection[selection.rfind(os.sep) + 1:]
-        _file.close()
-        self.dismiss()
 
-    def cancel(self):
-        self.dismiss()
-'''
-
-class HeaderButtons(BoxLayout):
-    pass
-
-class Header(AnchorLayout):
-    pass
-
-class PageLayer(AnchorLayout):
-    pass
-
-class FooterButtons(BoxLayout):
-    pass
-
-class Footer(AnchorLayout):
-    pass
-
-class RootWidget(FloatLayout):
+class RootWidget(BoxLayout):
     stop = threading.Event()
     def __init__(self, **kwargs):
         super(RootWidget, self).__init__(**kwargs)
@@ -316,7 +289,6 @@ class OptionsPage(Screen):
             self.optionsmanager.add_widget(screen)
 
     def switchpage(self, page):
-        print(page)
         self.optionsmanager.current = page
 
 class FlashProgress(Popup):

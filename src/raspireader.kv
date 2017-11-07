@@ -1,72 +1,42 @@
 #:kivy 1.10.0
 #:import os os
 
-
 <RootWidget>:
   id: rootwidget
-  Header:
-    id: header
-    ActionBar:
-      pos_hint: {'top':1}
-      ActionView:
-        use_separator: True
-        ActionPrevious:
-          with_previous: False
-          title: 'RasPiReader'
-        ActionOverflow:
-        ActionButton:
-          text: "Start"
-          on_press: root.ids.pagemanager.current = "startpage"
-        ActionButton:
-          text: "Options"
-          on_press: root.ids.pagemanager.current = "optionspage"
-        ActionButton:
-          text: "Commit"
-          on_press: root.ids.pagemanager.current = "commitpage"
-        ActionButton:
-          text: "Backup"
-          on_press: root.ids.pagemanager.current = "backuppage"
-  PageLayer:
-    id: pagelayer
-    PageManager:
-      id: pagemanager
-      StartPage:
-        id: sp
-      OptionsPage:
-        id: op
-      CommitPage:
-        id: cp
-      BackupPage:
-        id: bp
-  Footer:
-    id: footer
-    FooterButtons:
-      Button:
-        text: "Print To Screen"
+  orientation: 'vertical'
+  ActionBar:
+    pos_hint: {'top':1}
+    ActionView:
+      use_separator: True
+      ActionPrevious:
+        with_previous: False
+        title: 'RasPiReader'
+      ActionOverflow:
+      ActionButton:
+        text: "Print"
         on_press: root.print_to_screen()
-
-<HeaderButtons>:
-  orientation: "horizontal"
-  size_hint: 1, 0.1
-
-<Header>:
-  anchor_x: "center"
-  anchor_y: "top"
-
-<PageLayer>:
-  anchor_x: "center"
-  anchor_y: "center"
-
-<FooterButtons>:
-  orientation: "horizontal"
-  size_hint: 1, 0.1
-
-<Footer>:
-  anchor_x: "center"
-  anchor_y: "bottom"
-
-<PageManager>:
-  size_hint: 1, .8
+      ActionButton:
+        text: "Start"
+        on_press: root.ids.pagemanager.current = "startpage"
+      ActionButton:
+        text: "Options"
+        on_press: root.ids.pagemanager.current = "optionspage"
+      ActionButton:
+        text: "Commit"
+        on_press: root.ids.pagemanager.current = "commitpage"
+      ActionButton:
+        text: "Backup"
+        on_press: root.ids.pagemanager.current = "backuppage"
+  PageManager:
+    id: pagemanager
+    StartPage:
+      id: sp
+    OptionsPage:
+      id: op
+    CommitPage:
+      id: cp
+    BackupPage:
+      id: bp
 
 <DownloadProgress>:
   title: 'Downloading {0}'.format(root.image)
@@ -167,31 +137,6 @@
       Button:
         text: "Load"
         on_release: root.load(filechooser.path, filechooser.selection)
-
-<SaveDialog>:
-  text_input: text_input
-  BoxLayout:
-    size: root.size
-    pos: root.pos
-    orientation: "vertical"
-    FileChooserListView:
-      id: filechooser
-      path: os.getcwd()
-      on_selection: test_input.text = self.selection and self.selection[0] or ''
-    TextInput:
-      id: text_input
-      size_hint_y: None
-      height: 30
-      multiline: False
-    BoxLayout:
-      size_hint_y: None
-      height: 30
-      Button:
-        text: "Cancel"
-        on_release: root.cancel()
-      Button:
-        text: "Save"
-        on_release: root.save(filechooser.path. text_input.text)
 
 <StartPage>:
   name: "startpage"
