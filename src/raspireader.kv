@@ -245,6 +245,17 @@
       id: optionsmanager
       size_hint: 1, 0.9
 
+<TextSetting>:
+  cols: 1
+  rows: 1
+  TextInput:
+    size_hint: None, None
+    height: 30
+    multiline: False
+    disabled: True
+    id: value
+    text: "Stuff"
+
 <BoolSetting>:
   cols: 2
   rows: 2
@@ -255,9 +266,11 @@
   CheckBox:
     id: enable
     group: "value"
+    active: root.state
   CheckBox:
     id: disable
     group: "value"
+    active: not root.state
 
 <SliderSetting>:
   rows: 2
@@ -267,6 +280,7 @@
   Slider:
     id: slider
     step: 1
+    disabled: True
 
 <SettingInfo>:
   rows: 2

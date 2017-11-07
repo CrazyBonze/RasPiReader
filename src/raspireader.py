@@ -198,10 +198,18 @@ class StartPage(Screen):
 class SettingInfo(GridLayout):
     pass
 
-class BoolSetting(GridLayout):
+class TextSetting(GridLayout):
+    enable = BooleanProperty()
     pass
 
+class BoolSetting(GridLayout):
+    enable = BooleanProperty()
+    state = BooleanProperty(True)
+    def get_state(self):
+        print(state)
+
 class SliderSetting(GridLayout):
+    enable = BooleanProperty(True)
     pass
 
 class Setting(GridLayout):
@@ -217,25 +225,24 @@ class Setting(GridLayout):
         self.setting_type = ''
         try:
             self.setting_type = self._setting['type']
+            info = SettingInfo()
+            info.ids.name.text = self._setting['name']
+            info.ids.enable.value = self._setting['enable']
+            self.add_widget(info)
         except:
             print("error")
         if(self.setting_type == 'bool'):
-            info = SettingInfo()
-            info.ids.name.text = self._setting['name']
-            info.ids.enable.value = self._setting['enable']
-            self.add_widget(info)
             bset = BoolSetting()
             self.add_widget(bset)
         elif(self.setting_type == 'slider'):
-            info = SettingInfo()
-            info.ids.name.text = self._setting['name']
-            info.ids.enable.value = self._setting['enable']
-            self.add_widget(info)
             sldr = SliderSetting()
             sldr.ids.slider.min = self._setting['min']
             sldr.ids.slider.max = self._setting['max']
             sldr.ids.slider.value = self._setting['default']
             self.add_widget(sldr)
+        elif(self.setting_type == 'text'):
+            text = TextSetting()
+            self.add_widget(text)
         else:
             self.add_widget(Label(text=self.label))
 
