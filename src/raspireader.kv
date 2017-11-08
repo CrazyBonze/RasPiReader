@@ -194,7 +194,6 @@
   cols: 1
   rows: 1
   TextInput:
-    size_hint: None, None
     height: 30
     multiline: False
     disabled: True
@@ -205,17 +204,17 @@
   cols: 2
   rows: 2
   Label:
+    id: enable_label
     text: "Enable"
   Label:
+    id: disable_label
     text: "Disable"
   CheckBox:
     id: enable
-    group: "value"
-    active: root.state
+    active: root.value
   CheckBox:
     id: disable
-    group: "value"
-    active: not root.state
+    active: not root.value
 
 <SliderSetting>:
   rows: 2
@@ -225,7 +224,6 @@
   Slider:
     id: slider
     step: 1
-    disabled: True
 
 <InfoPopup>:
   size_hint: None, None
@@ -255,7 +253,7 @@
     id: info_bubble
     text: "Description"
   Label:
-    text: "Enable setting"
+    text: "Disable setting"
   CheckBox:
     id: enable
 

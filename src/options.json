@@ -8,7 +8,7 @@
           "name": "disable_l2cache",
           "type": "bool",
           "default": 0,
-          "enable": false,
+          "disabled": true,
           "description": "Disable ARM access to GPU's L2 cache. Needs corresponding L2 disabled kernel."
         },
         {
@@ -17,7 +17,7 @@
           "default": 64,
           "min": 16,
           "max": 192,
-          "enable": false,
+          "disabled": false,
           "description": "GPU memory in megabyte. Sets the memory split between the ARM and GPU. ARM gets the remaining memory. Min 16."
         },
         {
@@ -26,7 +26,7 @@
           "default": 128,
           "min": 16,
           "max": 192,
-          "enable": false,
+          "disabled": true,
           "description": "GPU memory in megabyte for the 256 MB Raspberry Pi. Ignored by the 512 MB RP. Overrides gpu_mem. Max 192."
         },
         {
@@ -35,7 +35,7 @@
           "default": 128,
           "min": 16,
           "max": 448,
-          "enable": false,
+          "disabled": true,
           "description": "GPU memory in megabyte for the 512 MB Raspberry Pi. Ignored by the 256 MB RP. Overrides gpu_mem. Max 448."
         },
         {
@@ -44,20 +44,20 @@
           "default": 128,
           "min": 16,
           "max": 944,
-          "enable": false,
+          "disabled": true,
           "description": "GPU memory allocation in MB for 1024MB board revision. This option overrides gpu_mem."
         },
         {
           "name": "disable_pvt",
           "type": "bool",
           "default": 1,
-          "enable": false,
+          "disabled": true,
           "description": "Disable adjusting the refresh rate of RAM every 500 ms (measuring RAM temperature)."
         },
         {
           "name": "cma_lwm",
           "default": 16,
-          "enable": false,
+          "disabled": true,
           "description": "When GPU has less than cma_lwm (low water mark) memory available it will request some from ARM."
         }
       ]
@@ -70,14 +70,14 @@
           "name": "decode_MPG2",
           "type": "text",
           "default": "0x12345678",
-          "enable": false,
+          "disabled": true,
           "description": "License key to allow hardware MPEG-2 decoding."
         },
         {
           "name": "decode_WVC1",
           "type": "text",
           "default": "0x12345678",
-          "enable": false,
+          "disabled": true,
           "description": "License key to allow hardware VC-1 decoding."
         }
       ]

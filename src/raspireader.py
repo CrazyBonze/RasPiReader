@@ -180,7 +180,6 @@ class InfoPopup(Popup):
         self.title = self.label
         self.ids.desc.text = self.description
 
-
 class SettingInfo(GridLayout):
     def __init__(self, setting, **kwargs):
         super(SettingInfo, self).__init__(**kwargs)
@@ -196,26 +195,35 @@ class SettingInfo(GridLayout):
         info_pop.open()
 
 class simplesetting(GridLayout):
-    enable = BooleanProperty()
-    def __init__(self, **kwargs):
+    def __init__(self, name, **kwargs):
         super(simplesetting, self).__init__(**kwargs)
         data.pushOptionState(self)
+        self.name = name
+
+    def disable_set(self, value):
+        self.disabled = value
+        for s in self.ids:
+            self.ids[s].disabled = value
 
     def get_state(self):
-        return "Simple Setting"
+        disable = '#' if self.disabled else ''
+        state_str = '{0}{1} {2}'.format(disable, self.name, 'value')
+        return state_str
 
 class TextSetting(simplesetting):
-    def __init__(self, **kwargs):
-        super(TextSetting, self).__init__(**kwargs)
+    def __init__(self, name, **kwargs):
+        super(TextSetting, self).__init__(name, **kwargs)
 
 class BoolSetting(simplesetting):
-    state = BooleanProperty(True)
-    def __init__(self, **kwargs):
-        super(BoolSetting, self).__init__(**kwargs)
+    value = BooleanProperty(True)
+    def __init__(self, name, **kwargs):
+        super(BoolSetting, self).__init__(name, **kwargs)
+        self.ids.enable.group = self.name
+        self.ids.disable.group = self.name
 
 class SliderSetting(simplesetting):
-    def __init__(self, **kwargs):
-        super(SliderSetting, self).__init__(**kwargs)
+    def __init__(self, name, **kwargs):
+        super(SliderSetting, self).__init__(name, **kwargs)
 
 class Setting(GridLayout):
     def __init__(self, label, setting, **kwargs):
@@ -232,25 +240,31 @@ class Setting(GridLayout):
             self.setting_type = self._setting['type']
             info = SettingInfo(self._setting)
             info.ids.name.text = self._setting['name']
-            info.ids.enable.value = self._setting['enable']
+            info.ids.enable.active = self._setting['disabled']
+            info.ids.enable.bind(active=self.disable_setting)
             self.add_widget(info)
         except Exception as e:
             print(e)
         if(self.setting_type == 'bool'):
-            bset = BoolSetting()
-            self.add_widget(bset)
+            self.setting = BoolSetting(self._setting['name'])
+            self.setting.disable_set(self._setting['disabled'])
+            self.add_widget(self.setting)
         elif(self.setting_type == 'slider'):
-            sldr = SliderSetting()
-            sldr.ids.slider.min = self._setting['min']
-            sldr.ids.slider.max = self._setting['max']
-            sldr.ids.slider.value = self._setting['default']
-            self.add_widget(sldr)
+            self.setting = SliderSetting(self._setting['name'])
+            self.setting.ids.slider.min = self._setting['min']
+            self.setting.ids.slider.max = self._setting['max']
+            self.setting.ids.slider.value = self._setting['default']
+            self.setting.disable_set(self._setting['disabled'])
+            self.add_widget(self.setting)
         elif(self.setting_type == 'text'):
-            text = TextSetting()
-            self.add_widget(text)
+            self.setting = TextSetting(self._setting['name'])
+            self.setting.disable_set(self._setting['disabled'])
+            self.add_widget(self.setting)
         else:
             self.add_widget(Label(text=self.label))
 
+    def disable_setting(self, dt, value):
+        self.setting.disable_set(value)
 
 class OptScreen(Screen):
     def __init__(self, settings, **kwargs):
