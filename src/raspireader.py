@@ -195,10 +195,16 @@ class SettingInfo(GridLayout):
         info_pop.open()
 
 class simplesetting(GridLayout):
-    def __init__(self, name, **kwargs):
+    def __init__(self, setting, **kwargs):
         super(simplesetting, self).__init__(**kwargs)
         data.pushOptionState(self)
-        self.name = name
+        self._setting = setting
+        self.name = self._setting['name']
+        self._setting_value = str(self._setting['default'])
+        Clock.schedule_once(self._disable_set)
+
+    def _disable_set(self, dt):
+        self.disable_set(self._setting['disabled'])
 
     def disable_set(self, value):
         self.disabled = value
@@ -207,23 +213,36 @@ class simplesetting(GridLayout):
 
     def get_state(self):
         disable = '#' if self.disabled else ''
-        state_str = '{0}{1} {2}'.format(disable, self.name, 'value')
+        state_str = '{0}{1} {2}'.format(disable,
+                self.name, self._setting_value)
         return state_str
 
 class TextSetting(simplesetting):
     def __init__(self, name, **kwargs):
         super(TextSetting, self).__init__(name, **kwargs)
+        self.ids.value.text = self._setting['default']
+        self.ids.value.bind(text=self.update_value)
+
+    def update_value(self, dt, value):
+        self._setting_value = str(value)
 
 class BoolSetting(simplesetting):
     value = BooleanProperty(True)
-    def __init__(self, name, **kwargs):
-        super(BoolSetting, self).__init__(name, **kwargs)
+    def __init__(self, setting, **kwargs):
+        super(BoolSetting, self).__init__(setting, **kwargs)
         self.ids.enable.group = self.name
         self.ids.disable.group = self.name
 
 class SliderSetting(simplesetting):
-    def __init__(self, name, **kwargs):
-        super(SliderSetting, self).__init__(name, **kwargs)
+    def __init__(self, setting, **kwargs):
+        super(SliderSetting, self).__init__(setting, **kwargs)
+        self.ids.slider.min = self._setting['min']
+        self.ids.slider.max = self._setting['max']
+        self.ids.slider.value = self._setting['default']
+        self.ids.slider.bind(value=self.update_value)
+
+    def update_value(self, dt, value):
+        self._setting_value = str(value)
 
 class Setting(GridLayout):
     def __init__(self, label, setting, **kwargs):
@@ -246,19 +265,13 @@ class Setting(GridLayout):
         except Exception as e:
             print(e)
         if(self.setting_type == 'bool'):
-            self.setting = BoolSetting(self._setting['name'])
-            self.setting.disable_set(self._setting['disabled'])
+            self.setting = BoolSetting(self._setting)
             self.add_widget(self.setting)
         elif(self.setting_type == 'slider'):
-            self.setting = SliderSetting(self._setting['name'])
-            self.setting.ids.slider.min = self._setting['min']
-            self.setting.ids.slider.max = self._setting['max']
-            self.setting.ids.slider.value = self._setting['default']
-            self.setting.disable_set(self._setting['disabled'])
+            self.setting = SliderSetting(self._setting)
             self.add_widget(self.setting)
         elif(self.setting_type == 'text'):
-            self.setting = TextSetting(self._setting['name'])
-            self.setting.disable_set(self._setting['disabled'])
+            self.setting = TextSetting(self._setting)
             self.add_widget(self.setting)
         else:
             self.add_widget(Label(text=self.label))
