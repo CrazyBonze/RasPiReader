@@ -71,14 +71,13 @@ class PersistentData(Singleton):
             print('Failed validation check!')
 
     def build_config(self):
-        config_header = ''
+        config_header = Template('')
         config_options = ''
         with open('config.template', 'r') as config_template:
-            config_header = config_template.read()
+            config_header = Template(config_template.read())
         for i in PersistentData.OptionStates:
-            config_options = config_options + i.get_state()
-        s = Template(config_header)
-        return s.substitute(options=config_options)
+            config_options += i.get_state()
+        return config_header.substitute(options=config_options)
 
     def validate(self):
         #check if img exists
