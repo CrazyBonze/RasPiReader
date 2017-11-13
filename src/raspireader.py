@@ -213,8 +213,11 @@ class simplesetting(GridLayout):
 
     def get_state(self):
         disable = '#' if self.disabled else ''
-        state_str = '{0}{1} {2}'.format(disable,
-                self.name, self._setting_value)
+        state_str = '# {0}\n{1}{2} {3}\n'.format(
+                self._setting['description'],
+                disable,
+                self.name,
+                self._setting_value)
         return state_str
 
 class TextSetting(simplesetting):

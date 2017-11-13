@@ -1,4 +1,5 @@
 from pathlib import Path
+from string import Template
 import stat, os, shlex
 
 class Singleton(object):
@@ -69,6 +70,16 @@ class PersistentData(Singleton):
         else:
             print('Failed validation check!')
 
+    def build_config(self):
+        config_header = ''
+        config_options = ''
+        with open('config.template', 'r') as config_template:
+            config_header = config_template.read()
+        for i in PersistentData.OptionStates:
+            config_options = config_options + i.get_state()
+        s = Template(config_header)
+        return s.substitute(options=config_options)
+
     def validate(self):
         #check if img exists
         if not Path(PersistentData.IMGFile).is_file():
@@ -85,7 +96,5 @@ class PersistentData(Singleton):
         print('Config Settings:\t{0}'.format(PersistentData.ConfigSettings))
         print('WiFi:\t\t{0}'.format(PersistentData.WIFI))
         print('Option States:')
-        for i in PersistentData.OptionStates:
-            print(i.get_state())
-
+        print(self.build_config())
 
