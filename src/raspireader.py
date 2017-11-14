@@ -247,6 +247,13 @@ class SliderSetting(simplesetting):
     def update_value(self, dt, value):
         self._setting_value = str(value)
 
+class ListSetting(simplesetting):
+    def __init__(self, setting, **kwargs):
+        super(ListSetting, self).__init__(setting, **kwargs)
+
+    def update_value(self, dt, value):
+        self._setting_value = str(value)
+
 class Setting(GridLayout):
     def __init__(self, label, setting, **kwargs):
         super(Setting, self).__init__(**kwargs)
