@@ -247,12 +247,38 @@ class SliderSetting(simplesetting):
     def update_value(self, dt, value):
         self._setting_value = str(value)
 
+class ListButton(Button):
+    def __init__(self, name, val, **kwargs):
+        super(ListButton, self).__init__(**kwargs)
+        self.text = name
+        self.value = val
+        self.height=30
+        self.size_hint_y = None
+
 class ListSetting(simplesetting):
     def __init__(self, setting, **kwargs):
         super(ListSetting, self).__init__(setting, **kwargs)
+        self.default = self._setting['default']
+        self.dd = DropDown()
+        self.vd = {}
+        self.values = self._setting['list']['value']
+        self.descriptions = self._setting['list']['description']
+        for i in range(len(self.values)):
+            desc = self.descriptions[i]
+            val = self.values[i]
+            self.vd[desc] = val
+            btn = ListButton(desc, val, text=desc)
+            btn.bind(on_release=lambda btn: self.dd.select(btn.text))
+            self.dd.add_widget(btn)
+        self.ids.value.bind(on_release=self.dd.open)
+        self.dd.bind(on_select=self.update_value)
+        self.ids.value.text = self.descriptions[self.default]
+        self._setting_value = str(self.values[self.default])
 
     def update_value(self, dt, value):
-        self._setting_value = str(value)
+        print(self.vd[value])
+        self.ids.value.text = value
+        self._setting_value = str(self.vd[value])
 
 class Setting(GridLayout):
     def __init__(self, label, setting, **kwargs):
@@ -282,6 +308,9 @@ class Setting(GridLayout):
             self.add_widget(self.setting)
         elif(self.setting_type == 'text'):
             self.setting = TextSetting(self._setting)
+            self.add_widget(self.setting)
+        elif(self.setting_type == 'list'):
+            self.setting = ListSetting(self._setting)
             self.add_widget(self.setting)
         else:
             self.add_widget(Label(text=self.label))
