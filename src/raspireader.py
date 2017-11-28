@@ -415,16 +415,26 @@ class CommitPage(Screen):
     def __init__(self, **kwargs):
         super(CommitPage, self).__init__(**kwargs)
         self.dd = DropDown()
+        Clock.schedule_interval(self.sd_dd_update, 0.05)
+        self.types = []
 
-    def sd_dd(self):
-        types = list_disks()
-        if not types:
+    def sd_dd_update(self, dt):
+        self.types = list_disks()
+        if(not self.sd in self.types and not self.commit_disable):
             self.dd.clear_widgets()
             self.sd = "SD card"
             self.commit_disable = True
+            data.setDiskSD('')
+
+    def sd_dd(self):
+        if not self.types:
+            self.dd.clear_widgets()
+            self.sd = "SD card"
+            self.commit_disable = True
+            data.setDiskSD('')
             return
         self.dd.clear_widgets()
-        for i in types:
+        for i in self.types:
             btn = Button(text=i, size_hint_y=None, height=30)
             btn.bind(on_release=lambda btn: self.dd.select(btn.text))
             self.dd.add_widget(btn)
