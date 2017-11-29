@@ -2,6 +2,7 @@ import subprocess
 import os
 import errno
 import time
+import shutil
 
 class img_mount:
     def __init__(self, img):
@@ -23,6 +24,15 @@ class img_mount:
         print('detached loopback {0}'.format(self._loopback))
         self.__umount(self._disks)
         self.__detach_loopback(self._loopback)
+
+    def write_config(self, config):
+        print(config)
+        shutil.copyfile('{0}/config.txt'.format(self._disks[0]),
+                '{0}/config.back'.format(self._disks[0]))
+        config_txt = open('{0}/config.txt'.format(self._disks[0]),'w')
+        config_txt.write(config)
+        config_txt.close()
+
 
     def write_file(self, f, path):
         pass
@@ -192,16 +202,9 @@ class img_mount:
 
 if __name__ == '__main__':
     i = '/home/michael/RasPiReader/src/images/2017-09-07-raspbian-stretch/2017-09-07-raspbian-stretch.img'
+    i = '/home/micheal/RasPiReader/src/images/2017-09-07-raspbian-stretch/2017-09-07-raspbian-stretch.img'
     img = img_mount(i)
-    time.sleep(5)
+    img.write_config('#writing config\n')
+    time.sleep(30)
     img.close()
 
-    '''
-    print(get_loopback())
-    lb = create_loopback('/home/micheal/RasPiReader/src/images/2017-08-16-raspbian-stretch/2017-08-16-raspbian-stretch.img')
-    print(lb)
-    print(map_loopback(lb))
-    #print(umount('/media/michael/boot'))
-    #print(umount('/media/micheal/037616fd-28fe-4652-8248-2042ea30b929'))
-    print(detach_loopback(lb))
-    '''
