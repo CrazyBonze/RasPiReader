@@ -2,6 +2,7 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.clock import Clock
+from kivy.graphics import Color, Rectangle, Canvas
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.anchorlayout import AnchorLayout
@@ -281,15 +282,28 @@ class ListSetting(simplesetting):
         self._setting_value = str(self.vd[value])
 
 class Setting(GridLayout):
-    def __init__(self, label, setting, **kwargs):
+    def __init__(self, label, setting, color, **kwargs):
         super(Setting, self).__init__(**kwargs)
         Clock.schedule_once(self._finish_init)
         self._setting = setting
         self.label = label
+        self.canvas = Canvas()
+        with self.canvas.before:
+            Color(rgba=color)
+            self.rect = Rectangle(size=self.size, pos=self.pos)
+        self.bind(pos=self.update_bg, size=self.update_bg)
+
+    def update_bg(self, dt, value):
+        self.rect.pos = self.pos
+        self.rect.size = self.size
 
     def _finish_init(self, dt):
-        self.cols = 2
         self.height = 100
+        #with self.canvas.before:
+            #Color(0,1,0,1)
+            #self.rect = Rectangle(size=self.size,
+                    #pos=self.pos)
+        self.cols = 2
         self.setting_type = ''
         try:
             self.setting_type = self._setting['type']
@@ -327,11 +341,13 @@ class OptScreen(Screen):
     def _finish_init(self, dt):
         self.layout = GridLayout(cols=1, size_hint_y=None)
         self.layout.bind(minimum_height=self.layout.setter('height'))
+        alternate = 0.25
         for setting in self._settings:
-            s = Setting(setting['name'], setting)
-            s.size_hint_y = None
+            s = Setting(setting['name'], setting, (.44,.27,.42,alternate))
             s.height = 60
+            s.size_hint_y = None
             self.layout.add_widget(s)
+            alternate = 0.25 if alternate==0.2 else 0.2
         self.view = ScrollView(size=self.size, scroll_type=['bars'])
         self.add_widget(self.view)
         self.view.add_widget(self.layout)

@@ -3,18 +3,27 @@
 
 <RootWidget>:
   id: rootwidget
+  canvas.before:
+    Color:
+      rgba: 0,0,0,.5
+    Rectangle:
+      pos: self.pos
+      size: self.size
   orientation: 'vertical'
   ActionBar:
+    background_color:0,131,117,0.5
     pos_hint: {'top':1}
     ActionView:
       use_separator: True
       ActionPrevious:
+        app_icon: 'icon.png'
         with_previous: False
-        title: 'RasPiReader'
+        previous_image_width: 1
+        title: "RasPiReader"
       ActionOverflow:
-      ActionButton:
-        text: "Print"
-        on_press: root.print_to_screen()
+      #ActionButton:
+        #text: "Print"
+        #on_press: root.print_to_screen()
       ActionButton:
         text: "Start"
         on_press: root.ids.pagemanager.current = "startpage"
@@ -24,9 +33,9 @@
       ActionButton:
         text: "Commit"
         on_press: root.ids.pagemanager.current = "commitpage"
-      ActionButton:
-        text: "Backup"
-        on_press: root.ids.pagemanager.current = "backuppage"
+      #ActionButton:
+        #text: "Backup"
+        #on_press: root.ids.pagemanager.current = "backuppage"
   PageManager:
     id: pagemanager
     StartPage:
@@ -141,11 +150,13 @@
 <StartPage>:
   name: "startpage"
   GridLayout:
-    rows: 2
+    rows: 3
     Label:
+      markup: True
       size_hint: 1, 0.1
-      text: "Start Page"
+      text: ('[b]Start Page[/b]')
     StackLayout:
+      size_hint: 1, 0.2
       Label:
         size_hint: 0.2, None
         height: 30
@@ -178,11 +189,22 @@
         height: 30
         text: "Download"
         on_release: root.download_image(root.download_file)
+    AnchorLayout:
+      size_hint: 1, 0.7
+      anchor_x: 'center'
+      anchor_y: 'center'
+      Image:
+        source: 'raspberry-pi.png'
+        size: 400, 400 / self.image_ratio
 
 <OptionsPage>:
   name: "optionspage"
   GridLayout:
-    rows:2
+    rows:3
+    Label:
+      markup: True
+      size_hint: 1, 0.1
+      text: ('[b]Options Page[/b]')
     BoxLayout:
       id: optionsmenue
       size_hint: 1, 0.1
@@ -275,14 +297,26 @@
   height: 30
   on_press: root.update()
 
+#<Setting>:
+  #size_hint_y: None
+  #height: 60
+  #canvas:
+    #Color:
+      #id: c
+      #rgba: 1,1,1,1
+    #Rectangle:
+      #pos: self.pos
+      #size: self.size
+
 <CommitPage>:
   name: "commitpage"
   id: commitpage
   GridLayout:
     rows: 2
     Label:
+      markup: True
       size_hint: 1, 0.1
-      text: "Commit Page"
+      text: ('[b]Commit Page[/b]')
     StackLayout:
       GridLayout:
         size_hint: 1, 0.3

@@ -24,6 +24,9 @@ class img_mount:
         self.__umount(self._disks)
         self.__detach_loopback(self._loopback)
 
+    def write_config(self, config):
+        pass
+
     def write_file(self, f, path):
         pass
 
