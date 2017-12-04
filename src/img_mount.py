@@ -26,17 +26,12 @@ class img_mount:
         self.__detach_loopback(self._loopback)
 
     def write_config(self, config):
-<<<<<<< HEAD
-        pass
-=======
         print(config)
         shutil.copyfile('{0}/config.txt'.format(self._disks[0]),
                 '{0}/config.back'.format(self._disks[0]))
         config_txt = open('{0}/config.txt'.format(self._disks[0]),'w')
         config_txt.write(config)
         config_txt.close()
-
->>>>>>> 45ba034fb152f2be8dfd7de758c088644181799a
 
     def write_file(self, f, path):
         pass
