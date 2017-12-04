@@ -300,10 +300,6 @@ class Setting(GridLayout):
 
     def _finish_init(self, dt):
         self.height = 100
-        #with self.canvas.before:
-            #Color(0,1,0,1)
-            #self.rect = Rectangle(size=self.size,
-                    #pos=self.pos)
         self.cols = 2
         self.setting_type = ''
         try:
