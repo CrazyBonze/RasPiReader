@@ -27,6 +27,7 @@ from threading import Thread
 from download_img import *
 from list_disk import *
 from flash import *
+from img_mount import *
 import json
 
 # Persistent Data
@@ -464,6 +465,10 @@ class CommitPage(Screen):
 
     def commit(self):
         if data.validate():
+            print("Writing files to img")
+            img = img_mount(data.getIMGFile())
+            img.write_config(data.build_config())
+            img.close()
             print("Commiting to SD card")
             self.flash_progress = FlashProgress()
             self.flash_progress.validate = self.ids['validate'].active
