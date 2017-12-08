@@ -356,6 +356,23 @@
               1
             ]
           }
+        },
+        {
+          "name": "max_usb_current",
+          "type": "list",
+          "default": 0,
+          "disabled": true,
+          "description": "When set to 1, change the output current limit (for all 4 USB ports combined) from 600mA to double that, 1200mA.\nThis option is not available for Model A/B boards.",
+          "list": {
+            "description": [
+              "600mA (Default)",
+              "1200mA"
+            ],
+            "value": [
+              0,
+              1
+            ]
+          }
         }
       ],
       "description": ""
