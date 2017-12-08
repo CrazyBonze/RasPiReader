@@ -308,7 +308,7 @@
       text: ('[b]Commit Page[/b]')
     StackLayout:
       GridLayout:
-        size_hint: 1, 0.3
+        size_hint: 1, 0.2
         cols: 3
         Label:
           size_hint: 0.2, None
@@ -338,13 +338,17 @@
           active: True
           size_hint: 0.2, None
           height: 30
-      Button:
-        size_hint: 1, None
-        id: sd_commit
-        disabled: root.commit_disable
-        text: "Commit to SD card"
-        height: 60
-        on_release: root.commit()
+      AnchorLayout:
+        anchor_x: 'center'
+        andhor_y: 'top'
+        size_hint: 1, 0.7
+        Button:
+          size_hint: .5, None
+          id: sd_commit
+          disabled: root.commit_disable
+          text: "Commit to SD card"
+          height: 60
+          on_release: root.commit()
 
 
 <BackupPage>:
