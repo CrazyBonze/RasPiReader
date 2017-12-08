@@ -94,12 +94,173 @@
     },
     {
       "title": "Camera",
-      "settings": [],
+      "settings": [
+        {
+          "name": "start_x",
+          "type": "bool",
+          "default": 0,
+          "disabled": true,
+          "description": "Enabling the camera requires gpu_mem option to be specified with a value of at least 128."
+        },
+        {
+          "name": "disable_camera_led",
+          "type": "list",
+          "default": 0,
+          "disabled": true,
+          "description": "Turn off the red camera led when recording video or taking a still picture.",
+          "list": {
+            "description": [
+              "LED enabled (Default)",
+              "LED disabled"
+            ],
+            "value": [
+              0,
+              1
+            ]
+          }
+        }
+      ],
       "description": ""
     },
     {
       "title": "Boot",
-      "settings": [],
+      "settings": [
+        {
+          "name": "disable_commandline_tags",
+          "type": "bool",
+          "default": 0,
+          "disabled": true,
+          "description": "Stop start.elf from filling in ATAGS (memory from 0x100) before launching kernel"
+        },
+        {
+          "name": "cmdline (string)",
+          "type": "text",
+          "default": "value",
+          "disabled": true,
+          "description": "Command line parameters. Can be used instead of cmdline.txt file"
+        },
+        {
+          "name": "kernel (string)",
+          "type": "text",
+          "default": "value",
+          "disabled": true,
+          "description": "Alternative name to use when loading kernel."
+        },
+        {
+          "name": "kernel_address",
+          "type": "text",
+          "default": "0x00000000",
+          "disabled": true,
+          "description": "Address to load kernel.img file at"
+        },
+        {
+          "name": "kernel_old",
+          "type": "list",
+          "default": 0,
+          "disabled": true,
+          "description": "Support loading old kernels",
+          "list": {
+            "description": [
+              "Disabled (Default)",
+              "Load kernel at address 0x00000000"
+            ],
+            "value": [
+              0,
+              1
+            ]
+          }
+        },
+        {
+          "name": "ramfsfile (string)",
+          "type": "text",
+          "default": "value",
+          "disabled": true,
+          "description": "ramfs file to load"
+        },
+        {
+          "name": "ramfsaddr",
+          "type": "text",
+          "default": "0x00000000",
+          "disabled": true,
+          "description": "Address to load ramfs file at"
+        },
+        {
+          "name": "initramfs (string address)",
+          "type": "text",
+          "default": "initramf.gz 0x00800000",
+          "disabled": true,
+          "description": "ramfs file and address to load it at (it's like ramfsfile+ramfsaddr in one option). \nNOTE: this option uses different syntax than all other options - you should not use \"=\" character here."
+        },
+        {
+          "name": "device_tree_address",
+          "type": "text",
+          "default": "0x00000000",
+          "disabled": true,
+          "description": "Address to load device_tree at"
+        },
+        {
+          "name": "init_uart_baud",
+          "type": "text",
+          "default": "115200",
+          "disabled": true,
+          "description": "Initial uart baud rate."
+        },
+        {
+          "name": "init_uart_clock",
+          "type": "text",
+          "default": "3000000",
+          "disabled": true,
+          "description": "Initial uart clock.\nDefault 3000000 (3MHz)"
+        },
+        {
+          "name": "boot_delay",
+          "type": "text",
+          "default": "1",
+          "disabled": true,
+          "description": "Wait for a given number of seconds in start.elf before loading kernel.img.\ndelay = (1000 * boot_delay) + boot_delay_ms"
+        },
+        {
+          "name": "boot_delay_ms",
+          "type": "text",
+          "default": "0",
+          "disabled": true,
+          "description": "Wait for a given number of seconds in start.elf before loading kernel.img.\ndelay = (1000 * boot_delay) + boot_delay_ms"
+        },
+        {
+          "name": "avoid_safe_mode",
+          "type": "list",
+          "default": 0,
+          "disabled": true,
+          "description": "Adding a jumper between pins 5 & 6 of P1 enables a recovery Safe Mode. If pins 5 & 6 are used for connecting to external devices (e.g. GPIO), then this setting can be used to ensure Safe Mode is not triggered.",
+          "list": {
+            "description": [
+              "Respect Safe Mode input (Default)",
+              "Ignore Safe Mode input"
+            ],
+            "value": [
+              0,
+              1
+            ]
+          }
+        },
+        {
+          "name": "disable_splash",
+          "type": "list",
+          "default": 0,
+          "disabled": true,
+          "description": "Avoids the rainbow splash screen on boot.",
+          "list": {
+            "description": [
+              "Splash screen enabled (Default)",
+              "Splash screen disabled"
+            ],
+            "value": [
+              0,
+              1
+            ]
+          }
+        }
+      ],
       "description": ""
     },
     {
@@ -178,7 +339,25 @@
     },
     {
       "title": "Misc.",
-      "settings": [],
+      "settings": [
+        {
+          "name": "test_mode",
+          "type": "list",
+          "default": 0,
+          "disabled": true,
+          "description": "Enable test sound/image during boot for manufacturing test.",
+          "list": {
+            "description": [
+              "Disable Test Mod (Default)",
+              "Enable Test Mode"
+            ],
+            "value": [
+              0,
+              1
+            ]
+          }
+        }
+      ],
       "description": ""
     }
   ]
